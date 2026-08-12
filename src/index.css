@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Typography ─────────────────────────────────────────── */
+body { font-family: 'Inter', sans-serif; }
+h1, h2, h3, h4, h5 { font-family: 'IBM Plex Sans', sans-serif; }
+.font-display { font-family: 'IBM Plex Sans', sans-serif; }
+.font-mono-crm { font-family: 'JetBrains Mono', monospace; }
+
+/* ── Layout ─────────────────────────────────────────────── */
+.sidebar-w { width: 260px; min-width: 260px; }
+
+/* ── Table header style ─────────────────────────────────── */
+.th-crm {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748B;
+  background-color: #F8FAFC !important;
+}
+
+/* ── Glassmorphism overlay ──────────────────────────────── */
+.glass-dock {
+  background: rgba(10, 25, 47, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* ── Gold hotspot pulse ─────────────────────────────────── */
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0.65); }
+  60%       { box-shadow: 0 0 0 12px rgba(212,175,55,0); }
+}
+.hotspot { animation: pulse-gold 2.2s infinite; }
+
+/* ── Gold accent top border card ────────────────────────── */
+.card-gold { border-top: 4px solid #D4AF37; }
+
+/* ── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #F8FAFC; }
+::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #64748B; }
+
+/* ── Radial progress color override ────────────────────── */
+.radial-gold { --value: 0; color: #D4AF37; }
+
+/* ── Kanban card hover ──────────────────────────────────── */
+.kanban-card { transition: box-shadow 0.15s, transform 0.15s; }
+.kanban-card:hover { box-shadow: 0 4px 16px rgba(10,25,47,0.08); transform: translateY(-1px); }
+
+/* ── Step active color ──────────────────────────────────── */
+.step-active-gold:before,
+.step-active-gold:after { background-color: #D4AF37 !important; color: #0A192F !important; }
