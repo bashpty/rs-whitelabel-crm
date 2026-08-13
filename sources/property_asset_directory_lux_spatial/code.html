@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Property &amp; Asset Inventory | LUX-SPATIAL CRM</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "tertiary-container": "#cba72f",
+                      "background": "#f7f9fb",
+                      "error-container": "#ffdad6",
+                      "surface": "#f7f9fb",
+                      "on-error-container": "#93000a",
+                      "on-surface-variant": "#44474d",
+                      "surface-dim": "#d8dadc",
+                      "tertiary": "#735c00",
+                      "outline-variant": "#c5c6cd",
+                      "inverse-primary": "#b9c7e4",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "surface-white": "#FFFFFF",
+                      "inverse-on-surface": "#eff1f3",
+                      "surface-container-highest": "#e0e3e5",
+                      "primary-container": "#0d1c32",
+                      "surface-variant": "#e0e3e5",
+                      "surface-container-high": "#e6e8ea",
+                      "on-primary": "#ffffff",
+                      "primary": "#000000",
+                      "divider": "#E2E8F0",
+                      "on-tertiary-fixed": "#241a00",
+                      "on-primary-container": "#76849f",
+                      "on-primary-fixed": "#0d1c32",
+                      "on-secondary-container": "#54647a",
+                      "surface-container-low": "#f2f4f6",
+                      "secondary": "#505f76",
+                      "primary-fixed": "#d6e3ff",
+                      "error": "#ba1a1a",
+                      "tertiary-fixed-dim": "#e9c349",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-container": "#d0e1fb",
+                      "secondary-fixed": "#d3e4fe",
+                      "surface-container": "#eceef0",
+                      "on-secondary": "#ffffff",
+                      "tertiary-fixed": "#ffe088",
+                      "on-surface": "#191c1e",
+                      "on-tertiary-fixed-variant": "#574500",
+                      "surface-tint": "#515f78",
+                      "on-error": "#ffffff",
+                      "inverse-surface": "#2d3133",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-container": "#4e3d00",
+                      "on-primary-fixed-variant": "#39475f",
+                      "on-background": "#191c1e",
+                      "outline": "#75777e",
+                      "surface-bright": "#f7f9fb",
+                      "on-secondary-fixed": "#0b1c30",
+                      "primary-fixed-dim": "#b9c7e4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "grid-margin": "2rem",
+                      "gutter": "1.5rem",
+                      "section-padding": "3rem",
+                      "stack-compact": "0.5rem",
+                      "stack-default": "1rem"
+              },
+              "fontFamily": {
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "IBM Plex Sans"
+                      ],
+                      "headline-lg": [
+                              "IBM Plex Sans"
+                      ],
+                      "headline-md": [
+                              "IBM Plex Sans"
+                      ],
+                      "headline-lg-mobile": [
+                              "IBM Plex Sans"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "JetBrains Mono"
+                      ],
+                      "label-md": [
+                              "JetBrains Mono"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "11px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-md": [
+                              "13px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md text-body-md antialiased overflow-x-hidden min-h-screen flex">
+<!-- SideNavBar -->
+<aside class="h-full w-64 fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant z-40 hidden md:flex flex flex-col p-stack-default gap-stack-compact">
+<div class="px-4 py-6">
+<h1 class="font-headline-md text-headline-md text-primary font-bold">Brokerage HQ</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Managing 24 Assets</p>
+</div>
+<nav class="flex-1 space-y-2 mt-4">
+<!-- Active Tab: Portfolio -->
+<a class="flex items-center gap-stack-default bg-primary text-on-primary rounded-lg px-4 py-2 scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="business_center">business_center</span>
+<span class="font-label-md text-label-md">Portfolio</span>
+</a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="data_exploration">data_exploration</span>
+<span class="font-label-md text-label-md">Spatial Ingestion</span>
+</a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-md text-label-md">Lead Analytics</span>
+</a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="view_in_ar">view_in_ar</span>
+<span class="font-label-md text-label-md">3D Workspace</span>
+</a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+<span class="font-label-md text-label-md">Pipeline</span>
+</a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto space-y-2 pt-4 border-t border-outline-variant">
+<button class="w-full bg-tertiary-container text-on-tertiary-container font-label-md text-label-md font-bold py-3 rounded-lg hover:opacity-90 transition-opacity mb-4">
+                Close Deal
+            </button>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col md:ml-64 min-h-screen">
+<!-- TopNavBar -->
+<header class="bg-primary-container z-30 sticky top-0 bg-primary-container border-b border-outline-variant shadow-sm w-full">
+<div class="flex justify-between items-center w-full px-grid-margin py-stack-compact max-w-[1440px] mx-auto h-16">
+<div class="flex items-center gap-4 md:hidden">
+<span class="material-symbols-outlined text-on-primary-fixed cursor-pointer" data-icon="menu">menu</span>
+</div>
+<div class="hidden md:flex items-center">
+<!-- Nav items could go here if TopNavBar had distinct navigation, but we are using SideNav as primary -->
+<span class="text-headline-md font-headline-md font-bold text-on-secondary">LUX-SPATIAL CRM</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-primary-container" data-icon="search">search</span>
+<input class="bg-surface-container-highest border border-outline-variant rounded-full pl-10 pr-4 py-1.5 text-body-sm font-body-sm text-on-primary-fixed focus:outline-none focus:border-tertiary-container focus:ring-1 focus:ring-tertiary-container transition-all w-64 placeholder:text-on-primary-container" placeholder="Search inventory..." type="text"/>
+</div>
+<div class="flex items-center gap-2 text-on-primary-fixed">
+<button class="p-2 hover:bg-secondary-fixed-dim/10 transition-colors rounded-full rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 hover:bg-secondary-fixed-dim/10 transition-colors rounded-full rounded-full">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button class="p-2 hover:bg-secondary-fixed-dim/10 transition-colors rounded-full rounded-full">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+</div>
+<button class="hidden sm:block bg-surface-white text-primary-container font-label-md text-label-md font-bold px-4 py-2 rounded border border-outline-variant hover:bg-surface-container-low transition-colors">
+                        Add Property
+                    </button>
+<img alt="Executive User Profile" class="w-8 h-8 rounded-full border border-divider object-cover cursor-pointer" data-alt="A professional headshot of a corporate executive in a modern glass office, wearing a dark navy suit. The lighting is bright and high-key, emphasizing a clean, modern, and trustworthy institutional luxury aesthetic. The image is crisp, high-resolution, and perfectly suited for a premium CRM user profile avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDehcmBHZW3b-caB7hNOOdXpWJWzVMq7uahyDlZYaSwRNLiULyEcrdP5pvEh1cPg_XXxCiqSwygh6PLQ5Ml0pIN2qGGc1JTBnuCvfZ3UrmHGTqAKJxl6o1CIIFKT94fbBE65jArxEKWjNuSDbM6-WyFvgTj9DI_A__f35i141hlWtOsyPWqRGAsXDGkPhmf8Jv-Qk1c52yzZg4VIxhC6UrvbO0PHvTAo0J4UyGtLylCaAghGde0CHhI"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 w-full max-w-[1440px] mx-auto px-4 md:px-grid-margin py-section-padding flex flex-col md:flex-row gap-gutter">
+<!-- Filters Sidebar -->
+<aside class="w-full md:w-[280px] shrink-0 flex flex-col gap-6">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-2">Inventory</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Manage and analyze public properties.</p>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 shadow-sm mt-4">
+<div class="flex items-center justify-between mb-4 border-b border-divider pb-2">
+<h3 class="font-label-md text-label-md font-bold text-on-surface">Filters</h3>
+<button class="text-secondary font-label-sm text-label-sm hover:text-primary transition-colors">Clear All</button>
+</div>
+<!-- Property Type Filter -->
+<div class="mb-6">
+<h4 class="font-label-sm text-label-sm text-on-surface-variant mb-3 uppercase tracking-wider">Property Type</h4>
+<div class="space-y-2">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input checked="" class="rounded border-outline-variant text-primary-container focus:ring-primary-container" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface group-hover:text-primary transition-colors">Class A Office</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input checked="" class="rounded border-outline-variant text-primary-container focus:ring-primary-container" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface group-hover:text-primary transition-colors">Industrial</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input checked="" class="rounded border-outline-variant text-primary-container focus:ring-primary-container" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface group-hover:text-primary transition-colors">Multi-Family</span>
+</label>
+</div>
+</div>
+<!-- Portfolio Filter -->
+<div>
+<h4 class="font-label-sm text-label-sm text-on-surface-variant mb-3 uppercase tracking-wider">Portfolio</h4>
+<select class="w-full bg-surface border border-outline-variant rounded-md py-2 px-3 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-tertiary-container focus:ring-1 focus:ring-tertiary-container">
+<option>All Portfolios</option>
+<option>Global Alpha Fund</option>
+<option>Urban Core Yield</option>
+<option>Strategic Logistics</option>
+</select>
+</div>
+</div>
+</aside>
+<!-- Grid View -->
+<section class="flex-1">
+<!-- Sorting & View Controls -->
+<div class="flex justify-between items-center mb-6">
+<p class="font-body-sm text-body-sm text-on-surface-variant">Showing <span class="font-bold text-primary">124</span> properties</p>
+<div class="flex items-center gap-4">
+<select class="bg-transparent border-none text-body-sm font-body-sm text-primary font-medium focus:ring-0 cursor-pointer">
+<option>Sort by: Highest Valuation</option>
+<option>Sort by: Newest Added</option>
+<option>Sort by: Name (A-Z)</option>
+</select>
+<div class="flex items-center border border-outline-variant rounded bg-surface-container-lowest">
+<button class="p-1.5 bg-surface-container-high text-primary rounded-l"><span class="material-symbols-outlined text-[20px]" data-icon="grid_view">grid_view</span></button>
+<button class="p-1.5 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]" data-icon="view_list">view_list</span></button>
+</div>
+</div>
+</div>
+<!-- Property Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- High Value Card (Gold Border) -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden relative group hover:shadow-lg transition-shadow duration-300" style="border-top: 4px solid #cba72f;">
+<div class="h-48 w-full relative overflow-hidden">
+<div class="bg-cover bg-center w-full h-full transform group-hover:scale-105 transition-transform duration-500" data-alt="A striking exterior view of a modern, ultra-luxury high-rise office building in a dense metropolitan area at dusk. The building features sleek glass facades reflecting the city lights. The lighting is dramatic yet professional, adhering to a high-contrast institutional luxury aesthetic with deep navy shadows and bright, crisp highlights. The mood is powerful and authoritative." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDmJeGWTc-u8yrhwlUj4DOnmORzf-99dZ1RDtkgUQh8O1rzcGrgia5DEwisJGFbymGBvoyv3t2rFZzMyxJSfOlARv-VT3IY-WB4tnoelgosh2TlSjUhNOwXByWm4u-_YuTZ0kinMXcruoVI68NzLdZBLAh0QWg-wFKsHnbPqdXHBtZGqzTMCXGQMTK2CtmXbQjI65iLxhU0HPSLdFNCILfHwBYX1ixWgqko3wMz5uRew1KfBjnjv3MA')"></div>
+<!-- Synced Badge -->
+<div class="absolute top-3 left-3 bg-tertiary-container text-on-tertiary-container px-2.5 py-1 rounded-full flex items-center gap-1 shadow-md">
+<span class="material-symbols-outlined text-[14px]" data-icon="360" data-weight="fill">360</span>
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">Spatial Synced</span>
+</div>
+<!-- Glassmorphic Price Overlay -->
+<div class="absolute bottom-3 right-3 glass-panel px-3 py-1.5 rounded flex items-center">
+<span class="font-headline-md text-headline-md text-primary-container font-bold">$142.5M</span>
+</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-headline-md text-headline-md text-primary truncate pr-4">Apex Tower, NY</h3>
+<button class="text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Class A Office • 1.2M sqft</p>
+<div class="flex items-center justify-between pt-4 border-t border-divider">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#10B981]"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Active Tour</span>
+</div>
+<button class="text-primary-container font-label-md text-label-md font-bold hover:underline">View Asset</button>
+</div>
+</div>
+</article>
+<!-- Standard Card -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden relative group hover:shadow-lg transition-shadow duration-300">
+<div class="h-48 w-full relative overflow-hidden">
+<div class="bg-cover bg-center w-full h-full transform group-hover:scale-105 transition-transform duration-500" data-alt="An expansive, modern industrial logistics center viewed from a slightly elevated angle during mid-day. The facility features clean architectural lines, vast loading docks, and pristine concrete surroundings. The lighting is bright and even, creating a crisp, high-key light mode aesthetic. The color palette emphasizes clean grays and whites, reflecting a secure and efficient institutional asset." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBOt6-WjLHE4HUvJOydHMMMxE0QlNI8q3_4Shm4sW8wRfKFG4yWovCiqFrruBo-LHcmK5VA1plrSGoDHo1lOC5th1tNjMnAuui1xCxrYOL9W2ei24mK95OTN6JZQTQz1n9j2eSJFn4pcqrof1_vtk-RR9NCw7vUgIxWjEZe7wb9lU27wsb_VULQoeRO0RBR9e0KPRAk36uzyAAk0qUlkuka4Vac3zv7gEnh3uGQSbEqpmpqlJNFad7d')"></div>
+<!-- Unsynced state (no badge) -->
+<div class="absolute bottom-3 right-3 bg-surface-container-lowest/90 px-3 py-1.5 rounded flex items-center border border-outline-variant">
+<span class="font-headline-md text-headline-md text-primary font-bold">$84.0M</span>
+</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-headline-md text-headline-md text-primary truncate pr-4">Logistics Park West</h3>
+<button class="text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Industrial • 850k sqft</p>
+<div class="flex items-center justify-between pt-4 border-t border-divider">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Scan Pending</span>
+</div>
+<button class="text-primary-container font-label-md text-label-md font-bold hover:underline">View Asset</button>
+</div>
+</div>
+</article>
+<!-- High Value Card (Gold Border) -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden relative group hover:shadow-lg transition-shadow duration-300" style="border-top: 4px solid #cba72f;">
+<div class="h-48 w-full relative overflow-hidden">
+<div class="bg-cover bg-center w-full h-full transform group-hover:scale-105 transition-transform duration-500" data-alt="A sweeping architectural shot of a luxury multi-family residential complex featuring expansive glass balconies and lush modern landscaping. The image is bathed in soft, bright morning sunlight, establishing a premium, serene light-mode aesthetic. The scene uses subtle contrast with deep architectural shadows to imply depth, fitting an authoritative real estate portfolio presentation." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBygAeo9urP58UsXTWKZlmKk_LI5yRb69qFiOlO4eCvvvm0rUkrhkiRnD2d3ePsK3oyl9lexPPBaFWwQgYAfTBSabKEYyMgn3Udw9kpPldRyKvAbMMQ8m0Fr36tZdAreBH4LOHRTspHJWOvyeEgbPXmajMphKd5h8ZyJmTd3ihyOcjrpeNQ-iW5Cqgxif02HuxFrK6xYD3-vZRPRHQP5IKNJfXFNC9nh4s7HPSxt1JzJWehXFamoXPo')"></div>
+<!-- Synced Badge -->
+<div class="absolute top-3 left-3 bg-tertiary-container text-on-tertiary-container px-2.5 py-1 rounded-full flex items-center gap-1 shadow-md">
+<span class="material-symbols-outlined text-[14px]" data-icon="360" data-weight="fill">360</span>
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">Spatial Synced</span>
+</div>
+<div class="absolute bottom-3 right-3 glass-panel px-3 py-1.5 rounded flex items-center">
+<span class="font-headline-md text-headline-md text-primary-container font-bold">$210.3M</span>
+</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-headline-md text-headline-md text-primary truncate pr-4">The Lumiere Residencies</h3>
+<button class="text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Multi-Family • 340 Units</p>
+<div class="flex items-center justify-between pt-4 border-t border-divider">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#10B981]"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Active Tour</span>
+</div>
+<button class="text-primary-container font-label-md text-label-md font-bold hover:underline">View Asset</button>
+</div>
+</div>
+</article>
+</div>
+</section>
+</main>
+<!-- Footer Component -->
+<footer class="bg-surface-container-highest border-t border-outline-variant w-full mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center px-grid-margin py-stack-default w-full max-w-[1440px] mx-auto gap-4">
+<p class="font-body-sm text-body-sm text-on-surface-variant">© 2024 LUX-SPATIAL CRM. Institutional Grade Real Estate Intelligence.</p>
+<div class="flex items-center gap-6">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Security Architecture</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">API Documentation</a>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

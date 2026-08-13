@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Legal &amp; Document Vault - LUX-SPATIAL CRM</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config Injection -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error-container": "#ffdad6",
+                    "on-error-container": "#93000a",
+                    "surface-container-high": "#e6e8ea",
+                    "primary": "#000000",
+                    "inverse-on-surface": "#eff1f3",
+                    "tertiary-fixed": "#ffe088",
+                    "tertiary": "#735c00",
+                    "on-primary-container": "#76849f",
+                    "inverse-surface": "#2d3133",
+                    "primary-container": "#0d1c32",
+                    "surface-white": "#FFFFFF",
+                    "surface-tint": "#515f78",
+                    "on-secondary-container": "#54647a",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed": "#241a00",
+                    "on-primary-fixed-variant": "#39475f",
+                    "outline": "#75777e",
+                    "secondary-fixed": "#d3e4fe",
+                    "tertiary-fixed-dim": "#e9c349",
+                    "primary-fixed-dim": "#b9c7e4",
+                    "on-secondary": "#ffffff",
+                    "on-surface": "#191c1e",
+                    "surface-variant": "#e0e3e5",
+                    "on-background": "#191c1e",
+                    "tertiary-container": "#cba72f",
+                    "inverse-primary": "#b9c7e4",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "secondary": "#505f76",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-tertiary-container": "#4e3d00",
+                    "divider": "#E2E8F0",
+                    "surface-bright": "#f7f9fb",
+                    "on-secondary-fixed": "#0b1c30",
+                    "error": "#ba1a1a",
+                    "surface-container-low": "#f2f4f6",
+                    "surface-dim": "#d8dadc",
+                    "surface-container": "#eceef0",
+                    "primary-fixed": "#d6e3ff",
+                    "on-primary-fixed": "#0d1c32",
+                    "on-tertiary": "#ffffff",
+                    "outline-variant": "#c5c6cd",
+                    "surface": "#f7f9fb",
+                    "on-surface-variant": "#44474d",
+                    "on-tertiary-fixed-variant": "#574500",
+                    "on-primary": "#ffffff",
+                    "background": "#f7f9fb",
+                    "on-error": "#ffffff",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "secondary-container": "#d0e1fb"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "section-padding": "3rem",
+                    "stack-compact": "0.5rem",
+                    "grid-margin": "2rem",
+                    "stack-default": "1rem",
+                    "gutter": "1.5rem"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "display-lg": ["IBM Plex Sans"],
+                    "label-md": ["JetBrains Mono"],
+                    "headline-md": ["IBM Plex Sans"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["IBM Plex Sans"],
+                    "headline-lg-mobile": ["IBM Plex Sans"],
+                    "label-sm": ["JetBrains Mono"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "label-md": ["13px", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "label-sm": ["11px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        
+        /* Ensure table rows don't look disjointed */
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border-bottom: 1px solid theme('colors.outline-variant'); }
+        th { text-align: left; }
+        
+        /* Custom scrollbar for minimalist look */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: theme('colors.surface-variant'); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: theme('colors.outline-variant'); }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen overflow-x-hidden">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-primary-container z-40 shadow-sm border-b border-outline-variant fixed top-0 left-0 w-full" style="height: 72px;">
+<div class="flex justify-between items-center w-full px-grid-margin py-stack-compact max-w-[1440px] mx-auto h-full">
+<!-- Brand -->
+<div class="flex items-center gap-4">
+<div class="text-headline-md font-headline-md font-bold text-on-secondary">
+                    LUX-SPATIAL CRM
+                </div>
+</div>
+<!-- Search & Actions -->
+<div class="flex items-center gap-grid-margin">
+<!-- Search Bar (on_left configuration via flex) -->
+<div class="relative hidden md:block w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-primary-container text-[20px]">search</span>
+<input class="w-full bg-surface-white/10 border border-outline-variant/30 rounded-full py-1.5 pl-10 pr-4 text-on-secondary font-body-sm text-body-sm placeholder:text-on-primary-container focus:outline-none focus:border-tertiary-fixed transition-colors" placeholder="Search Vault..." type="text"/>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-stack-default">
+<button class="text-on-primary-fixed hover:bg-secondary-fixed-dim/10 transition-colors p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-primary-fixed hover:bg-secondary-fixed-dim/10 transition-colors p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="text-on-primary-fixed hover:bg-secondary-fixed-dim/10 transition-colors p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">help</span>
+</button>
+<!-- Primary Action -->
+<button class="bg-tertiary-fixed text-on-tertiary-fixed font-label-md text-label-md px-4 py-2 rounded-lg font-bold hover:bg-tertiary-fixed-dim transition-colors shadow-sm ml-2">
+                        Add Property
+                    </button>
+<!-- Profile -->
+<div class="ml-2 w-8 h-8 rounded-full overflow-hidden border border-outline-variant/50">
+<img alt="Executive User Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a corporate real estate executive in a modern, well-lit office setting. The lighting is bright and high-key, emphasizing a pristine, luxury aesthetic. The executive is wearing a tailored navy suit." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZnwzqCp4m4pLX9gfBO9lM-mcz-2_FmbP2L9bxiwuEPYGJaM8l7XKDvRg1uVf1jmxc0N8tgESLMcWa-zIYMb_7r8zgwJ4BTRvucUNqlz-wZVP-UEGcLXqCZMgihtyvhHPE-FvLAbmPXbtOn9s1XstLfLIgOMpxCOUZOtL5vx5-VUNv0IO83ctPulMIpytfFnaC6UVLbpqBa_xDsjAyEiG4Jqeem0qwEH4SWMUDkgD6yQJfv5fHersl"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- SideNavBar (Shared Component) -->
+<aside class="bg-surface-container-low border-r border-outline-variant h-full w-64 fixed left-0 top-[72px] z-30 flex flex-col p-stack-default gap-stack-compact">
+<!-- Header area from JSON -->
+<div class="mb-stack-default px-2">
+<div class="flex items-center gap-3 mb-1">
+<div class="w-10 h-10 bg-primary text-on-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined">domain</span>
+</div>
+<div>
+<h2 class="font-headline-md text-[18px] font-semibold text-primary leading-tight">Brokerage HQ</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Managing 24 Assets</p>
+</div>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex-1 flex flex-col gap-1">
+<!-- Active Tab: Portfolio (Maps best to Vault/Assets) -->
+<a class="flex items-center gap-stack-default bg-primary text-on-primary rounded-lg px-4 py-2 font-label-md text-label-md opacity-90 transition-all duration-200 scale-95 origin-left shadow-sm" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">business_center</span>
+                Portfolio
+            </a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 font-label-md text-label-md hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">data_exploration</span>
+                Spatial Ingestion
+            </a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 font-label-md text-label-md hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+                Lead Analytics
+            </a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 font-label-md text-label-md hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">view_in_ar</span>
+                3D Workspace
+            </a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 font-label-md text-label-md hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">account_tree</span>
+                Pipeline
+            </a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 font-label-md text-label-md hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+                Settings
+            </a>
+</nav>
+<!-- CTA -->
+<div class="mt-auto mb-4">
+<button class="w-full bg-tertiary-container text-on-tertiary-container font-label-md text-label-md py-2 rounded-lg font-bold shadow-sm border border-tertiary-container hover:opacity-90 transition-opacity">
+                Close Deal
+            </button>
+</div>
+<!-- Footer Tabs -->
+<div class="flex flex-col gap-1 border-t border-outline-variant pt-4">
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 font-label-md text-label-md hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">contact_support</span>
+                Support
+            </a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 font-label-md text-label-md hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+                Sign Out
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-[72px] min-h-screen flex flex-col">
+<!-- Workspace Header -->
+<div class="px-section-padding py-stack-default border-b border-outline-variant bg-surface-white">
+<div class="flex justify-between items-end max-w-[1200px] mx-auto w-full">
+<div>
+<div class="flex items-center gap-2 text-on-surface-variant mb-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Portfolio</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-wider font-semibold">Legal Vault</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">Document Vault</h1>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 border border-outline bg-surface-white px-4 py-2 rounded-md font-label-md text-label-md text-on-surface hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                        Filter Views
+                    </button>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-md font-label-md text-label-md shadow-sm hover:bg-inverse-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]">upload_file</span>
+                        Upload
+                    </button>
+</div>
+</div>
+</div>
+<!-- Layout Grid -->
+<div class="flex-1 px-section-padding py-grid-margin max-w-[1200px] mx-auto w-full grid grid-cols-12 gap-gutter">
+<!-- Left Pane: Taxonomy & Folders (Col 3) -->
+<div class="col-span-3 flex flex-col gap-stack-default">
+<!-- Folders Card -->
+<div class="bg-surface-white border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="px-4 py-3 bg-surface-container-low border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-label-md text-label-md text-primary font-bold">Deal Rooms</h3>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">add</span>
+</div>
+<ul class="py-2 flex flex-col gap-1 px-2 font-body-sm text-body-sm text-on-surface">
+<li>
+<a class="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-surface-container-low transition-colors bg-secondary-container/30 text-on-secondary-container font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">folder_open</span>
+                                740 Park Ave (Active)
+                            </a>
+</li>
+<li>
+<a class="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">folder</span>
+                                Project Skyline
+                            </a>
+</li>
+<li>
+<a class="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">folder</span>
+                                One Vanderbilt
+                            </a>
+</li>
+</ul>
+</div>
+<!-- Document Types Filter -->
+<div class="bg-surface-white border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="px-4 py-3 bg-surface-container-low border-b border-outline-variant">
+<h3 class="font-label-md text-label-md text-primary font-bold">Document Types</h3>
+</div>
+<div class="p-4 flex flex-col gap-3 font-body-sm text-body-sm text-on-surface-variant">
+<label class="flex items-center gap-3 cursor-pointer">
+<input checked="" class="form-checkbox text-primary rounded border-outline-variant focus:ring-primary" type="checkbox"/>
+<span>All Documents</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="form-checkbox text-primary rounded border-outline-variant focus:ring-primary" type="checkbox"/>
+<span>Contracts</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="form-checkbox text-primary rounded border-outline-variant focus:ring-primary" type="checkbox"/>
+<span>Leases</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="form-checkbox text-primary rounded border-outline-variant focus:ring-primary" type="checkbox"/>
+<span>Offers / Term Sheets</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="form-checkbox text-primary rounded border-outline-variant focus:ring-primary" type="checkbox"/>
+<span>Financial Disclosures</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Right Pane: Main Vault & Contracts (Col 9) -->
+<div class="col-span-9 flex flex-col gap-gutter">
+<!-- High Priority: Pending Signatures (Contracts mapped to offers) -->
+<div class="bg-surface-white rounded-xl shadow-sm border border-outline-variant border-t-4 border-t-tertiary-container relative overflow-hidden">
+<!-- Subtle background pattern/gradient for luxury feel -->
+<div class="absolute inset-0 bg-gradient-to-br from-tertiary-fixed/5 to-transparent pointer-events-none"></div>
+<div class="p-5 border-b border-outline-variant relative z-10 flex justify-between items-center">
+<div>
+<h2 class="font-headline-md text-[20px] text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-container">edit_document</span>
+                                Contracts &amp; Agreements
+                            </h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Pending actions requiring your authorization.</p>
+</div>
+<span class="bg-tertiary-container text-on-tertiary-container font-label-md text-label-md px-3 py-1 rounded-full font-bold">
+                            2 Action Required
+                        </span>
+</div>
+<div class="p-0 relative z-10">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface-container-low/50">
+<tr>
+<th class="px-5 py-3 font-label-md text-label-md text-on-surface-variant font-medium">Contract / Parent Offer</th>
+<th class="px-5 py-3 font-label-md text-label-md text-on-surface-variant font-medium">Counterparty</th>
+<th class="px-5 py-3 font-label-md text-label-md text-on-surface-variant font-medium">Due Date</th>
+<th class="px-5 py-3 text-right"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="hover:bg-surface-bright transition-colors group">
+<td class="px-5 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-error-container/20 text-on-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">history_edu</span>
+</div>
+<div>
+<div class="font-medium text-primary">Master Lease Agreement</div>
+<div class="text-[12px] text-on-surface-variant flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">subdirectory_arrow_right</span>
+                                                    Offer: 740 Park - Unit 12B
+                                                </div>
+</div>
+</div>
+</td>
+<td class="px-5 py-4 text-on-surface">Vanguard Holdings</td>
+<td class="px-5 py-4 text-error font-medium">Today</td>
+<td class="px-5 py-4 text-right">
+<button class="bg-primary text-on-primary font-label-sm text-label-sm px-4 py-2 rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                                            Review &amp; Sign
+                                        </button>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors group">
+<td class="px-5 py-4 border-none">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-tertiary-fixed/20 text-tertiary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">contract</span>
+</div>
+<div>
+<div class="font-medium text-primary">NDA - Project Skyline</div>
+<div class="text-[12px] text-on-surface-variant flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">subdirectory_arrow_right</span>
+                                                    Initial Prospectus
+                                                </div>
+</div>
+</div>
+</td>
+<td class="px-5 py-4 text-on-surface border-none">Atlas Capital Group</td>
+<td class="px-5 py-4 text-on-surface-variant border-none">Nov 12, 2024</td>
+<td class="px-5 py-4 text-right border-none">
+<button class="bg-primary text-on-primary font-label-sm text-label-sm px-4 py-2 rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                                            Review &amp; Sign
+                                        </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Complete Document Registry -->
+<div class="bg-surface-white rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+<div class="p-5 border-b border-outline-variant flex justify-between items-center bg-surface-container-low/30">
+<h2 class="font-headline-md text-[18px] text-primary font-semibold">Document Registry</h2>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="border border-outline-variant rounded-md py-1.5 pl-9 pr-3 text-body-sm font-body-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none w-64 bg-surface-white" placeholder="Filter registry..." type="text"/>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface-container-low border-b-2 border-outline-variant">
+<tr>
+<th class="px-5 py-3 font-label-md text-label-md text-on-surface-variant font-medium">Document Title</th>
+<th class="px-5 py-3 font-label-md text-label-md text-on-surface-variant font-medium">Type</th>
+<th class="px-5 py-3 font-label-md text-label-md text-on-surface-variant font-medium">Signature Status</th>
+<th class="px-5 py-3 font-label-md text-label-md text-on-surface-variant font-medium">Uploaded At</th>
+<th class="px-5 py-3 text-right"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/50">
+<!-- Document Row 1 -->
+<tr class="hover:bg-surface-bright transition-colors cursor-pointer group">
+<td class="px-5 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline-variant text-[24px]">description</span>
+<span class="font-medium text-primary group-hover:text-tertiary-container transition-colors">Term Sheet - 740 Park Ave</span>
+</div>
+</td>
+<td class="px-5 py-4 text-on-surface-variant">Offer</td>
+<td class="px-5 py-4">
+<span class="inline-flex items-center gap-1.5 bg-surface-container text-on-surface-variant font-label-sm text-label-sm px-2.5 py-1 rounded-full border border-outline-variant/30">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                                            Signed
+                                        </span>
+</td>
+<td class="px-5 py-4 text-on-surface-variant">Oct 24, 2024</td>
+<td class="px-5 py-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Document Row 2 -->
+<tr class="hover:bg-surface-bright transition-colors cursor-pointer group">
+<td class="px-5 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline-variant text-[24px]">picture_as_pdf</span>
+<span class="font-medium text-primary group-hover:text-tertiary-container transition-colors">Floorplan Spatial Scan Data</span>
+</div>
+</td>
+<td class="px-5 py-4 text-on-surface-variant">Technical Asset</td>
+<td class="px-5 py-4">
+<span class="inline-flex items-center gap-1.5 bg-surface-container text-on-surface-variant font-label-sm text-label-sm px-2.5 py-1 rounded-full border border-outline-variant/30">
+<span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+                                            N/A
+                                        </span>
+</td>
+<td class="px-5 py-4 text-on-surface-variant">Oct 22, 2024</td>
+<td class="px-5 py-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Document Row 3 -->
+<tr class="hover:bg-surface-bright transition-colors cursor-pointer group bg-tertiary-fixed/5">
+<td class="px-5 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary-container text-[24px]">draw</span>
+<span class="font-medium text-primary group-hover:text-tertiary-container transition-colors">Master Lease Agreement</span>
+</div>
+</td>
+<td class="px-5 py-4 text-on-surface-variant">Lease</td>
+<td class="px-5 py-4">
+<span class="inline-flex items-center gap-1.5 bg-tertiary-fixed/30 text-tertiary-container font-label-sm text-label-sm px-2.5 py-1 rounded-full border border-tertiary-container/30 font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container animate-pulse"></span>
+                                            Pending Signatures
+                                        </span>
+</td>
+<td class="px-5 py-4 text-on-surface-variant">Oct 20, 2024</td>
+<td class="px-5 py-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Document Row 4 -->
+<tr class="hover:bg-surface-bright transition-colors cursor-pointer group">
+<td class="px-5 py-4 border-none">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline-variant text-[24px]">policy</span>
+<span class="font-medium text-primary group-hover:text-tertiary-container transition-colors">Insurance Binder - Q4</span>
+</div>
+</td>
+<td class="px-5 py-4 text-on-surface-variant border-none">Financial</td>
+<td class="px-5 py-4 border-none">
+<span class="inline-flex items-center gap-1.5 bg-surface-container text-on-surface-variant font-label-sm text-label-sm px-2.5 py-1 rounded-full border border-outline-variant/30">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                                            Signed
+                                        </span>
+</td>
+<td class="px-5 py-4 text-on-surface-variant border-none">Oct 15, 2024</td>
+<td class="px-5 py-4 text-right border-none">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination pseudo-element -->
+<div class="p-4 border-t border-outline-variant flex justify-between items-center bg-surface-container-lowest">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Showing 1 to 4 of 42 documents</span>
+<div class="flex gap-1">
+<button class="p-1 border border-outline-variant rounded hover:bg-surface-container-low text-on-surface-variant disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="px-3 py-1 border border-primary bg-primary text-on-primary rounded font-label-sm text-label-sm">1</button>
+<button class="px-3 py-1 border border-outline-variant rounded hover:bg-surface-container-low text-on-surface font-label-sm text-label-sm">2</button>
+<button class="px-3 py-1 border border-outline-variant rounded hover:bg-surface-container-low text-on-surface font-label-sm text-label-sm">3</button>
+<button class="p-1 border border-outline-variant rounded hover:bg-surface-container-low text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

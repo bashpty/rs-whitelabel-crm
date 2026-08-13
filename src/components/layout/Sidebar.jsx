@@ -1,36 +1,36 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Users, GitBranch, Satellite, Settings, Zap } from 'lucide-react'
+import {
+  LayoutDashboard, Users, GitBranch, Satellite, Settings, Zap,
+  Megaphone, CheckSquare, Key, FolderOpen, Building2, CalendarCheck, UserCog,
+} from 'lucide-react'
 
-const navItems = [
+const navGroups = [
   {
-    to: '/portafolio',
-    icon: LayoutDashboard,
-    label: 'Control de Portafolio',
-    sublabel: 'Activos y Tours',
+    label: 'Módulos Principales',
+    items: [
+      { to: '/portafolio',        icon: LayoutDashboard, label: 'Control de Portafolio',    sublabel: 'Activos y Tours' },
+      { to: '/prospectos',        icon: Users,           label: 'Intención de Prospectos',  sublabel: 'Analítica Espacial' },
+      { to: '/transacciones',     icon: GitBranch,       label: 'Pipeline Transaccional',   sublabel: 'Deals Activos' },
+      { to: '/ingestion-espacial',icon: Satellite,       label: 'Ingestión Espacial',       sublabel: 'Pipeline 360°' },
+    ],
   },
   {
-    to: '/prospectos',
-    icon: Users,
-    label: 'Intención de Prospectos',
-    sublabel: 'Analítica Espacial',
+    label: 'Gestión Operativa',
+    items: [
+      { to: '/campanas',          icon: Megaphone,       label: 'Campañas',                 sublabel: 'Marketing Multi-Canal' },
+      { to: '/tareas',            icon: CheckSquare,     label: 'Tareas',                   sublabel: 'Productividad' },
+      { to: '/visitas',           icon: CalendarCheck,   label: 'Visitas y Campo',          sublabel: 'Operaciones Fieldwork' },
+      { to: '/arrendamientos',    icon: Key,             label: 'Arrendamiento',            sublabel: 'Ocupación y Leases' },
+      { to: '/documentos',        icon: FolderOpen,      label: 'Bóveda de Documentos',     sublabel: 'Contratos Legales' },
+      { to: '/proyectos',         icon: Building2,       label: 'Control de Proyectos',     sublabel: 'Desarrollo y Unidades' },
+    ],
   },
   {
-    to: '/transacciones',
-    icon: GitBranch,
-    label: 'Pipeline Transaccional',
-    sublabel: 'Deals Activos',
-  },
-  {
-    to: '/ingestion-espacial',
-    icon: Satellite,
-    label: 'Ingestión Espacial',
-    sublabel: 'Pipeline 360°',
-  },
-  {
-    to: '/configuracion',
-    icon: Settings,
-    label: 'Configuración',
-    sublabel: 'Gobernanza del Sistema',
+    label: 'Administración',
+    items: [
+      { to: '/usuarios',          icon: UserCog,         label: 'Usuarios y Roles',         sublabel: 'Acceso y Permisos' },
+      { to: '/configuracion',     icon: Settings,        label: 'Configuración',            sublabel: 'Gobernanza del Sistema' },
+    ],
   },
 ]
 
@@ -53,49 +53,54 @@ export default function Sidebar() {
       </div>
 
       {/* ── Nav ───────────────────────────────────────── */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-        <div className="font-mono-crm text-[9px] text-primary-content/30 tracking-widest uppercase px-3 pb-2">
-          Módulos Principales
-        </div>
-
-        {navItems.map(({ to, icon: Icon, label, sublabel }) => (
-          <NavLink
-            key={to}
-            to={to}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 group ${
-                isActive
-                  ? 'bg-accent text-accent-content'
-                  : 'text-primary-content/65 hover:bg-white/8 hover:text-primary-content'
-              }`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <Icon
-                  className={`w-4.5 h-4.5 flex-shrink-0 ${
-                    isActive ? 'text-accent-content' : 'text-primary-content/40 group-hover:text-primary-content/80'
-                  }`}
-                />
-                <div className="min-w-0 flex-1">
-                  <div
-                    className={`text-[13px] font-display font-medium leading-tight truncate ${
-                      isActive ? 'text-accent-content' : ''
-                    }`}
-                  >
-                    {label}
-                  </div>
-                  <div
-                    className={`font-mono-crm text-[9px] leading-tight mt-0.5 truncate ${
-                      isActive ? 'text-accent-content/65' : 'text-primary-content/28'
-                    }`}
-                  >
-                    {sublabel}
-                  </div>
-                </div>
-              </>
-            )}
-          </NavLink>
+      <nav className="flex-1 px-3 py-4 space-y-4 overflow-y-auto">
+        {navGroups.map((group) => (
+          <div key={group.label}>
+            <div className="font-mono-crm text-[9px] text-primary-content/30 tracking-widest uppercase px-3 pb-2">
+              {group.label}
+            </div>
+            <div className="space-y-0.5">
+              {group.items.map(({ to, icon: Icon, label, sublabel }) => (
+                <NavLink
+                  key={to}
+                  to={to}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 group ${
+                      isActive
+                        ? 'bg-accent text-accent-content'
+                        : 'text-primary-content/65 hover:bg-white/8 hover:text-primary-content'
+                    }`
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      <Icon
+                        className={`w-4 h-4 flex-shrink-0 ${
+                          isActive ? 'text-accent-content' : 'text-primary-content/40 group-hover:text-primary-content/80'
+                        }`}
+                      />
+                      <div className="min-w-0 flex-1">
+                        <div
+                          className={`text-[13px] font-display font-medium leading-tight truncate ${
+                            isActive ? 'text-accent-content' : ''
+                          }`}
+                        >
+                          {label}
+                        </div>
+                        <div
+                          className={`font-mono-crm text-[9px] leading-tight mt-0.5 truncate ${
+                            isActive ? 'text-accent-content/65' : 'text-primary-content/28'
+                          }`}
+                        >
+                          {sublabel}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </NavLink>
+              ))}
+            </div>
+          </div>
         ))}
       </nav>
 

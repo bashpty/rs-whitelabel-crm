@@ -2,7 +2,7 @@
   "name": "lux-spatial-crm",
   "private": true,
   "version": "1.0.0",
-  "homepage": "https://<TU-USUARIO>.github.io/<NOMBRE-REPO>",
+  "homepage": "https://rlasso92.github.io/rs-whitelabel-crm",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Development &amp; Project Control | LUX-SPATIAL CRM</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e6e8ea",
+                        "primary": "#000000",
+                        "inverse-on-surface": "#eff1f3",
+                        "tertiary-fixed": "#ffe088",
+                        "tertiary": "#735c00",
+                        "on-primary-container": "#76849f",
+                        "inverse-surface": "#2d3133",
+                        "primary-container": "#0d1c32",
+                        "surface-white": "#FFFFFF",
+                        "surface-tint": "#515f78",
+                        "on-secondary-container": "#54647a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#241a00",
+                        "on-primary-fixed-variant": "#39475f",
+                        "outline": "#75777e",
+                        "secondary-fixed": "#d3e4fe",
+                        "tertiary-fixed-dim": "#e9c349",
+                        "primary-fixed-dim": "#b9c7e4",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#191c1e",
+                        "surface-variant": "#e0e3e5",
+                        "on-background": "#191c1e",
+                        "tertiary-container": "#cba72f",
+                        "inverse-primary": "#b9c7e4",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "secondary": "#505f76",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-tertiary-container": "#4e3d00",
+                        "divider": "#E2E8F0",
+                        "surface-bright": "#f7f9fb",
+                        "on-secondary-fixed": "#0b1c30",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-dim": "#d8dadc",
+                        "surface-container": "#eceef0",
+                        "primary-fixed": "#d6e3ff",
+                        "on-primary-fixed": "#0d1c32",
+                        "on-tertiary": "#ffffff",
+                        "outline-variant": "#c5c6cd",
+                        "surface": "#f7f9fb",
+                        "on-surface-variant": "#44474d",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "on-primary": "#ffffff",
+                        "background": "#f7f9fb",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "secondary-container": "#d0e1fb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "section-padding": "3rem",
+                        "stack-compact": "0.5rem",
+                        "grid-margin": "2rem",
+                        "stack-default": "1rem",
+                        "gutter": "1.5rem"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "display-lg": ["IBM Plex Sans"],
+                        "label-md": ["JetBrains Mono"],
+                        "headline-md": ["IBM Plex Sans"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["IBM Plex Sans"],
+                        "headline-lg-mobile": ["IBM Plex Sans"],
+                        "label-sm": ["JetBrains Mono"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "label-md": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "label-sm": ["11px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .luxury-card-gold-border {
+            border-top: 4px solid #D4AF37;
+        }
+        .luxury-shadow {
+            box-shadow: 0 20px 25px -5px rgba(10, 25, 47, 0.04);
+        }
+        .hotspot-ring {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.5; box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+            70% { transform: scale(1); opacity: 0; box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+            100% { transform: scale(0.95); opacity: 0; box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased overflow-x-hidden min-h-screen flex flex-col md:flex-row">
+<!-- Mobile Top Navigation (hidden on md) -->
+<nav class="md:hidden w-full bg-primary-container dark:bg-primary-container border-b border-outline-variant shadow-sm z-50 sticky top-0">
+<div class="flex justify-between items-center w-full px-grid-margin py-stack-compact max-w-[1440px] mx-auto">
+<div class="text-headline-md font-headline-md font-bold text-on-secondary dark:text-on-secondary">LUX-SPATIAL CRM</div>
+<div class="flex items-center gap-stack-default">
+<button class="text-on-primary-fixed dark:text-primary-fixed-dim hover:bg-secondary-fixed-dim/10 p-2 rounded-full transition-colors"><span class="material-symbols-outlined">menu</span></button>
+</div>
+</div>
+</nav>
+<!-- SideNavBar (Web - fixed left) -->
+<nav class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-surface-container-lowest border-r border-outline-variant p-stack-default gap-stack-compact z-40">
+<div class="mb-section-padding px-4">
+<div class="flex items-center gap-stack-compact mb-2">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-label-md" style="font-variation-settings: 'FILL' 1;">business</span>
+</div>
+<span class="font-headline-md text-headline-md text-primary font-bold">LUX-SPATIAL</span>
+</div>
+<div class="font-body-md text-body-md font-medium text-on-surface">Brokerage HQ</div>
+<div class="font-label-md text-label-md text-on-surface-variant">Managing 24 Assets</div>
+</div>
+<div class="flex-1 overflow-y-auto space-y-2">
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">business_center</span> Portfolio
+            </a>
+<a class="flex items-center gap-stack-default bg-primary text-on-primary rounded-lg px-4 py-2 hover:bg-primary/90 transition-all font-label-md text-label-md opacity-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">data_exploration</span> Spatial Ingestion
+            </a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">analytics</span> Lead Analytics
+            </a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">view_in_ar</span> 3D Workspace
+            </a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">account_tree</span> Pipeline
+            </a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">settings</span> Settings
+            </a>
+</div>
+<div class="mt-auto space-y-2 pt-4 border-t border-outline-variant">
+<button class="w-full bg-tertiary-container text-on-tertiary-container font-label-md text-label-md py-3 rounded-DEFAULT hover:opacity-90 transition-opacity font-bold">Close Deal</button>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">contact_support</span> Support
+            </a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">logout</span> Sign Out
+            </a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 w-full flex flex-col min-h-screen bg-background">
+<!-- Header -->
+<header class="px-grid-margin py-section-padding bg-surface-white border-b border-divider flex flex-col md:flex-row justify-between items-start md:items-end gap-stack-default">
+<div>
+<h1 class="font-display-lg text-display-lg text-primary mb-2">Development Control</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Manage macro-level project statuses and micro-level spatial unit inventory across the global portfolio.</p>
+</div>
+<div class="flex gap-stack-default">
+<button class="flex items-center gap-2 border border-outline text-on-surface px-4 py-2 rounded-DEFAULT hover:bg-surface-container-low transition-colors font-label-md text-label-md">
+<span class="material-symbols-outlined">filter_list</span> Filter
+                </button>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-6 py-2 rounded-DEFAULT hover:opacity-90 transition-opacity font-label-md text-label-md font-bold">
+<span class="material-symbols-outlined">add</span> New Project
+                </button>
+</div>
+</header>
+<!-- Projects Grid -->
+<div class="p-grid-margin flex-1">
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-grid-margin">
+<!-- Project Card 1: High Priority / Under Construction -->
+<article class="bg-surface-white border border-divider rounded-lg overflow-hidden flex flex-col luxury-shadow luxury-card-gold-border group transition-all duration-300 hover:shadow-xl">
+<div class="relative h-64 w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A high-end architectural rendering of a modern, luxury skyscraper development under construction. Sleek glass facades reflect a golden sunset, contrasting with precise structural steel framing. The image employs a sophisticated corporate aesthetic, emphasizing structural precision and monumental scale, captured in 4k photorealistic detail with cinematic lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDIog_pLbdIKrPABV3a0QvQw-C5NbDFSpIH6okno3NWmh3PT3cqvBPOA0WlDrKBpQ15QLbHeqtQg79_gNr-aiiY6tZwv9-_uSLXdzRyFwxAn21R4bU92RvC7LXCv8Txfs8v-ZntCs0-wwRxBgk7PUE-jaQPp3Aum24wVmgWLcueuilXu3AOMjaTM76ReRtWxlRCcZj2dvjj2hjFvSlcMmORU1UhDHlu42ad-7304_pcp4J_hl6xCfu1')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent"></div>
+<div class="absolute top-4 right-4 glass-panel px-3 py-1 rounded-DEFAULT flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-[#34D399]"></div>
+<span class="font-label-md text-label-md text-primary font-bold">Under Construction</span>
+</div>
+<div class="absolute bottom-4 left-4 right-4">
+<h2 class="font-headline-lg text-headline-lg text-surface-white mb-1">Aura Residences - Tower A</h2>
+<div class="flex items-center gap-4 text-surface-variant font-label-md text-label-md">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">location_on</span> Dubai Marina</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">architecture</span> Masterplan V3.2</span>
+</div>
+</div>
+</div>
+<div class="p-stack-default flex-1 flex flex-col bg-surface-bright">
+<div class="flex justify-between items-center mb-stack-default pb-stack-compact border-b border-divider">
+<h3 class="font-headline-md text-headline-md text-on-surface">Unit Inventory</h3>
+<button class="text-tertiary font-label-md text-label-md flex items-center gap-1 hover:underline">
+                                View Masterplan <span class="material-symbols-outlined text-sm">open_in_new</span>
+</button>
+</div>
+<!-- Units List -->
+<div class="space-y-stack-compact overflow-y-auto max-h-[300px] pr-2">
+<!-- Unit Item: Available -->
+<div class="flex justify-between items-center p-3 bg-surface-white border border-divider rounded-DEFAULT hover:border-outline-variant transition-colors">
+<div class="flex items-center gap-3">
+<div class="bg-secondary-container text-on-secondary-container px-2 py-1 rounded font-label-md text-label-md">#PH-401</div>
+<div class="font-body-md text-body-md text-on-surface">Penthouse Suite</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-right">
+<div class="font-label-md text-label-md text-primary font-bold font-display-lg" style="font-size: 16px;">$4,250,000</div>
+<div class="font-label-sm text-label-sm text-[#059669]">Available</div>
+</div>
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+</div>
+<!-- Unit Item: Reserved -->
+<div class="flex justify-between items-center p-3 bg-surface-white border border-divider rounded-DEFAULT hover:border-outline-variant transition-colors opacity-80">
+<div class="flex items-center gap-3">
+<div class="bg-surface-container-highest text-on-surface-variant px-2 py-1 rounded font-label-md text-label-md">#40-12A</div>
+<div class="font-body-md text-body-md text-on-surface">Corner 3BR</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-right">
+<div class="font-label-md text-label-md text-primary font-bold font-display-lg" style="font-size: 16px;">$1,850,000</div>
+<div class="font-label-sm text-label-sm text-[#D97706] flex items-center gap-1"><span class="material-symbols-outlined text-[10px]">timer</span> Exp: 48h</div>
+</div>
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+</div>
+<!-- Unit Item: Sold -->
+<div class="flex justify-between items-center p-3 bg-surface-container-low border border-divider rounded-DEFAULT opacity-60">
+<div class="flex items-center gap-3">
+<div class="bg-surface-dim text-on-surface-variant px-2 py-1 rounded font-label-md text-label-md line-through">#39-01</div>
+<div class="font-body-md text-body-md text-on-surface-variant">Standard 2BR</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-right">
+<div class="font-label-md text-label-md text-on-surface-variant font-display-lg" style="font-size: 16px;">$1,100,000</div>
+<div class="font-label-sm text-label-sm text-error">Sold</div>
+</div>
+<button class="p-1 text-on-surface-variant" disabled=""><span class="material-symbols-outlined">lock</span></button>
+</div>
+</div>
+</div>
+</div>
+</article>
+<!-- Project Card 2: Pre-construction -->
+<article class="bg-surface-white border border-divider rounded-lg overflow-hidden flex flex-col luxury-shadow group transition-all duration-300 hover:shadow-xl">
+<div class="relative h-64 w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A minimalist architectural blueprint visualization overlaid on a stark white and pale grey topographical landscape. Thin, precise technical lines define a future residential complex. The lighting is bright and diffuse, creating a high-key, modern light-mode aesthetic that suggests planning, precision, and luxury institutional development." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAem858veKiov9-0G547PLS6Y5JbLPkAnPdDLuJ1R_jRAXul19dj-95-MDa8dP4KOiTi4cMLs8iqmsZ17ZHoNYNkzgjRsl7OlLItdln6bjXBpniZHIBgHaz_UvHmb7rDHS3AZCskBOGmkG-XoOdCvtz7E_yEkErByaEU2ru7IlZgOXDWlYcw53aa427Jc2s36cQjSZH6lUf00gCMkwVQ3pWtRgXuxxB-8YQjybfSUm7lo-ev677ZVkV')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary-container/90 to-transparent"></div>
+<div class="absolute top-4 right-4 glass-panel px-3 py-1 rounded-DEFAULT flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-[#60A5FA]"></div>
+<span class="font-label-md text-label-md text-primary font-bold">Pre-construction</span>
+</div>
+<div class="absolute bottom-4 left-4 right-4">
+<h2 class="font-headline-lg text-headline-lg text-surface-white mb-1">The Vertex Estate</h2>
+<div class="flex items-center gap-4 text-surface-variant font-label-md text-label-md">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">location_on</span> Geneva, CH</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">architecture</span> Conceptual Phase</span>
+</div>
+</div>
+</div>
+<div class="p-stack-default flex-1 flex flex-col bg-surface-bright">
+<div class="flex justify-between items-center mb-stack-default pb-stack-compact border-b border-divider">
+<h3 class="font-headline-md text-headline-md text-on-surface">Unit Inventory</h3>
+<button class="text-tertiary font-label-md text-label-md flex items-center gap-1 hover:underline">
+                                Spatial Map <span class="material-symbols-outlined text-sm">map</span>
+</button>
+</div>
+<!-- Units List (Pre-sales) -->
+<div class="space-y-stack-compact overflow-y-auto max-h-[300px] pr-2">
+<div class="p-4 border border-dashed border-outline-variant rounded-DEFAULT flex flex-col items-center justify-center text-center bg-surface-container-lowest py-8">
+<span class="material-symbols-outlined text-outline text-4xl mb-2">vpn_key</span>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-1">Pre-Sales Locked</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xs">Unit allocation is currently restricted pending final municipal approvals.</p>
+<button class="mt-4 border border-primary text-primary px-4 py-2 rounded-DEFAULT font-label-md text-label-md hover:bg-surface-container-low transition-colors">Request Early Access</button>
+</div>
+</div>
+</div>
+</article>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-auto border-t border-outline-variant bg-surface-container-highest dark:bg-surface-container-highest flex flex-col md:flex-row justify-between items-center px-grid-margin py-stack-default w-full z-10 relative">
+<div class="font-label-md text-label-md font-bold text-primary mb-4 md:mb-0">
+                © 2024 LUX-SPATIAL CRM. Institutional Grade Real Estate Intelligence.
+            </div>
+<div class="flex gap-4 font-body-sm text-body-sm text-on-surface-variant dark:text-on-surface-variant">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors" href="#">Security Architecture</a>
+<a class="hover:text-primary transition-colors" href="#">API Documentation</a>
+</div>
+</footer>
+</main>
+</body></html>

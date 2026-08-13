@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LUX-SPATIAL CRM - Contact &amp; Lead Directory</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&amp;family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "tertiary-container": "#cba72f",
+                        "background": "#f7f9fb",
+                        "error-container": "#ffdad6",
+                        "surface": "#f7f9fb",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#44474d",
+                        "surface-dim": "#d8dadc",
+                        "tertiary": "#735c00",
+                        "outline-variant": "#c5c6cd",
+                        "inverse-primary": "#b9c7e4",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "surface-white": "#FFFFFF",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary-container": "#0d1c32",
+                        "surface-variant": "#e0e3e5",
+                        "surface-container-high": "#e6e8ea",
+                        "on-primary": "#ffffff",
+                        "primary": "#000000",
+                        "divider": "#E2E8F0",
+                        "on-tertiary-fixed": "#241a00",
+                        "on-primary-container": "#76849f",
+                        "on-primary-fixed": "#0d1c32",
+                        "on-secondary-container": "#54647a",
+                        "surface-container-low": "#f2f4f6",
+                        "secondary": "#505f76",
+                        "primary-fixed": "#d6e3ff",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#e9c349",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#d0e1fb",
+                        "secondary-fixed": "#d3e4fe",
+                        "surface-container": "#eceef0",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#ffe088",
+                        "on-surface": "#191c1e",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "surface-tint": "#515f78",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#2d3133",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#4e3d00",
+                        "on-primary-fixed-variant": "#39475f",
+                        "on-background": "#191c1e",
+                        "outline": "#75777e",
+                        "surface-bright": "#f7f9fb",
+                        "on-secondary-fixed": "#0b1c30",
+                        "primary-fixed-dim": "#b9c7e4"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "grid-margin": "2rem",
+                        "gutter": "1.5rem",
+                        "section-padding": "3rem",
+                        "stack-compact": "0.5rem",
+                        "stack-default": "1rem"
+                    },
+                    fontFamily: {
+                        "body-md": ["Inter", "sans-serif"],
+                        "display-lg": ["IBM Plex Sans", "sans-serif"],
+                        "headline-lg": ["IBM Plex Sans", "sans-serif"],
+                        "headline-md": ["IBM Plex Sans", "sans-serif"],
+                        "headline-lg-mobile": ["IBM Plex Sans", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"],
+                        "label-sm": ["JetBrains Mono", "monospace"],
+                        "label-md": ["JetBrains Mono", "monospace"],
+                        "body-sm": ["Inter", "sans-serif"]
+                    },
+                    fontSize: {
+                        "body-md": ["16px", { lineHeight: "1.5", fontWeight: "400" }],
+                        "display-lg": ["48px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "600" }],
+                        "headline-lg": ["32px", { lineHeight: "1.2", fontWeight: "600" }],
+                        "headline-md": ["24px", { lineHeight: "1.3", fontWeight: "500" }],
+                        "headline-lg-mobile": ["28px", { lineHeight: "1.2", fontWeight: "600" }],
+                        "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+                        "label-sm": ["11px", { lineHeight: "1.4", fontWeight: "500" }],
+                        "label-md": ["13px", { lineHeight: "1.4", letterSpacing: "0.05em", fontWeight: "500" }],
+                        "body-sm": ["14px", { lineHeight: "1.5", fontWeight: "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .intent-ring {
+            stroke-dasharray: 100;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        /* Custom Scrollbar for high-density tables */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e0e3e5;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c5c6cd;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md h-screen w-full overflow-hidden flex selection:bg-tertiary-container selection:text-on-tertiary-container">
+<!-- SideNavBar (Shared Component) -->
+<nav class="bg-surface-container-low dark:bg-surface-container-lowest h-full w-64 fixed left-0 top-0 border-r border-outline-variant flex flex-col p-stack-default gap-stack-compact z-20">
+<!-- Header -->
+<div class="flex items-center gap-stack-default mb-stack-default">
+<div class="w-10 h-10 rounded-lg overflow-hidden bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary font-bold text-xl" style="font-variation-settings: 'FILL' 1;">domain</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md text-primary leading-tight">Brokerage HQ</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Managing 24 Assets</p>
+</div>
+</div>
+<!-- Main Navigation -->
+<div class="flex-1 flex flex-col gap-1 overflow-y-auto">
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">business_center</span>
+<span class="font-label-md text-label-md">Portfolio</span>
+</a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">data_exploration</span>
+<span class="font-label-md text-label-md">Spatial Ingestion</span>
+</a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">analytics</span>
+<span class="font-label-md text-label-md">Lead Analytics</span>
+</a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">view_in_ar</span>
+<span class="font-label-md text-label-md">3D Workspace</span>
+</a>
+<!-- Active State Navigation -->
+<a class="flex items-center gap-stack-default bg-primary text-on-primary rounded-lg px-4 py-2 opacity-90 transition-all duration-200 scale-95 origin-left shadow-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_tree</span>
+<span class="font-label-md text-label-md">Pipeline</span>
+</a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg group mt-auto" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<!-- CTA & Footer -->
+<div class="mt-auto flex flex-col gap-stack-compact pt-stack-default border-t border-outline-variant">
+<button class="w-full bg-tertiary-container text-on-tertiary-container font-label-md text-label-md py-2 rounded-lg font-bold hover:brightness-105 transition-all shadow-sm">
+                Close Deal
+            </button>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined text-[18px]">contact_support</span>
+<span class="font-label-sm text-label-sm">Support</span>
+</a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+<span class="font-label-sm text-label-sm">Sign Out</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col ml-64 bg-surface h-screen">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-primary-container dark:bg-primary-container docked full-width top-0 shadow-sm border-b border-outline-variant shrink-0 z-10">
+<div class="flex justify-between items-center w-full px-grid-margin py-stack-compact max-w-[1440px] mx-auto">
+<!-- Left: Branding & Search -->
+<div class="flex items-center gap-stack-default">
+<span class="text-headline-md font-headline-md font-bold text-on-secondary dark:text-on-secondary tracking-tight">LUX-SPATIAL CRM</span>
+<div class="relative ml-gutter hidden md:flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-on-primary-container text-sm">search</span>
+<input class="pl-9 pr-4 py-1.5 bg-surface-container-low border-none rounded text-body-sm font-body-sm text-on-surface w-64 focus:ring-1 focus:ring-tertiary-container placeholder:text-on-surface-variant/60 transition-shadow" placeholder="Search institutional network..." type="text"/>
+</div>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center gap-stack-default">
+<div class="flex items-center text-on-primary-fixed dark:text-primary-fixed-dim">
+<button class="p-2 hover:bg-secondary-fixed-dim/10 transition-colors rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 hover:bg-secondary-fixed-dim/10 transition-colors rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="p-2 hover:bg-secondary-fixed-dim/10 transition-colors rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+<div class="h-6 w-px bg-outline-variant/30 mx-2"></div>
+<button class="bg-tertiary-container text-on-tertiary-container px-4 py-1.5 rounded font-label-md text-label-md font-bold hover:brightness-105 transition-all shadow-sm">
+                        Add Property
+                    </button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant ml-2 shrink-0">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of an executive real estate broker in a sharply tailored navy suit, standing in a brightly lit modern office with subtle high-end architectural details in the background. The lighting is crisp and natural, highlighting a confident demeanor appropriate for a luxury institutional setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQrvofqeOPbzOgjZwUtZjm9vKVoaZmoQgi3e1W_jK_E_fXRV0F6Y7bxf1wdzSFgXNPF-LlVZljWzvur6_pQTlN9g007TU4_xWpK42qL22jBzvbQA4FOHUlvJflID3KCiq22hVeuWl1XOMHU01A-xfE0Nonl6CZ381KyQHbKd5cyg1ZsTnI9LSHdfpbR-RfPW2PgtYCmINquGDKt9WEZI1_zEEiZdexWl1aF99BTGhjo5Aj3JbV2MeM"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Workspace Viewport (Split-Pane Layout) -->
+<main class="flex-1 flex overflow-hidden">
+<!-- LEFT PANE: High-Density Data Table (70%) -->
+<div class="w-[70%] flex flex-col bg-surface overflow-hidden relative">
+<!-- Section Header & Filters -->
+<div class="px-section-padding pt-section-padding pb-stack-default flex flex-col gap-stack-default shrink-0 bg-surface z-10">
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-1 tracking-tight">Contact &amp; Lead Directory</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Global index of institutional clients and prospective leads across spatial assets.</p>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-3 py-1.5 border border-outline-variant rounded bg-surface-container-lowest text-on-surface-variant hover:border-outline transition-colors">
+<span class="material-symbols-outlined text-[16px]">download</span>
+<span class="font-label-sm text-label-sm">Export</span>
+</button>
+</div>
+</div>
+<!-- Filter Bar -->
+<div class="flex items-center gap-stack-default bg-surface-container-lowest p-2 rounded border border-outline-variant shadow-sm">
+<div class="flex items-center gap-2 px-3 border-r border-outline-variant shrink-0">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">filter_list</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Filters</span>
+</div>
+<select class="bg-transparent border-none text-body-sm font-body-sm text-on-surface focus:ring-0 cursor-pointer py-1">
+<option>Contact Type: All</option>
+<option>Type: Institutional Client</option>
+<option>Type: High-Net-Worth Lead</option>
+</select>
+<div class="h-4 w-px bg-outline-variant"></div>
+<select class="bg-transparent border-none text-body-sm font-body-sm text-on-surface focus:ring-0 cursor-pointer py-1">
+<option>Intent Score: &gt; 70</option>
+<option>Intent Score: &gt; 90 (Hot)</option>
+<option>Intent Score: All</option>
+</select>
+<div class="h-4 w-px bg-outline-variant"></div>
+<select class="bg-transparent border-none text-body-sm font-body-sm text-on-surface focus:ring-0 cursor-pointer py-1">
+<option>Asset Interest: All Regions</option>
+<option>Interest: Manhattan Comm.</option>
+<option>Interest: Miami Spatial</option>
+</select>
+<div class="ml-auto relative">
+<span class="material-symbols-outlined absolute left-2 top-1.5 text-on-surface-variant text-[16px]">search</span>
+<input class="pl-8 pr-3 py-1 bg-surface border border-outline-variant rounded text-body-sm font-body-sm w-48 focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" placeholder="Search directory..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Table Container -->
+<div class="flex-1 overflow-auto px-section-padding pb-section-padding">
+<table class="w-full text-left border-collapse">
+<thead class="sticky top-0 bg-surface z-10 shadow-[0_1px_0_0_#E2E8F0]">
+<tr>
+<th class="py-3 pr-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest font-semibold border-b border-divider">Entity / Name</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest font-semibold border-b border-divider">Classification</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest font-semibold border-b border-divider">Primary Comm.</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest font-semibold border-b border-divider text-center">Intent</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest font-semibold border-b border-divider">Broker Rep</th>
+<th class="py-3 pl-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest font-semibold border-b border-divider">Spatial Tags</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-divider font-body-sm text-body-sm bg-surface-container-lowest">
+<!-- Active/Selected Row Example -->
+<tr class="hover:bg-surface-container-high transition-colors cursor-pointer group bg-surface-container-low border-l-2 border-l-tertiary-container relative">
+<td class="py-3 pr-4 pl-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary text-on-primary flex items-center justify-center font-label-sm font-bold shrink-0">AE</div>
+<div>
+<div class="font-medium text-on-surface">Aurelius Enterprises</div>
+<div class="text-on-surface-variant text-[12px]">Julian Vance, CEO</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface">Corporate Lead</td>
+<td class="py-3 px-4 text-on-surface-variant font-label-sm">vance@aurelius.ent</td>
+<td class="py-3 px-4 text-center">
+<div class="relative w-8 h-8 mx-auto flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e0e3e5" stroke-width="3"></path>
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#cba72f" stroke-dasharray="92, 100" stroke-width="3"></path>
+</svg>
+<span class="absolute text-[10px] font-label-sm font-bold text-on-surface">92</span>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface">Sarah Jenkins</td>
+<td class="py-3 pl-4">
+<div class="flex gap-1 flex-wrap">
+<span class="px-2 py-0.5 rounded border border-outline-variant bg-surface text-on-surface-variant text-[11px] font-label-sm">3D Tour Viewed</span>
+<span class="px-2 py-0.5 rounded border border-tertiary-container/30 bg-tertiary-container/10 text-tertiary-container text-[11px] font-label-sm">High Value</span>
+</div>
+</td>
+</tr>
+<!-- Standard Row -->
+<tr class="hover:bg-surface-container-high transition-colors cursor-pointer group">
+<td class="py-3 pr-4 pl-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-container-highest text-on-surface flex items-center justify-center font-label-sm font-bold shrink-0">OP</div>
+<div>
+<div class="font-medium text-on-surface">Orion Partners LLC</div>
+<div class="text-on-surface-variant text-[12px]">Elena Rostova</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface">Institutional Client</td>
+<td class="py-3 px-4 text-on-surface-variant font-label-sm">erostova@orion.part</td>
+<td class="py-3 px-4 text-center">
+<div class="relative w-8 h-8 mx-auto flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e0e3e5" stroke-width="3"></path>
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#0d1c32" stroke-dasharray="64, 100" stroke-width="3"></path>
+</svg>
+<span class="absolute text-[10px] font-label-sm font-bold text-on-surface">64</span>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface">Marcus Thorne</td>
+<td class="py-3 pl-4">
+<div class="flex gap-1 flex-wrap">
+<span class="px-2 py-0.5 rounded border border-outline-variant bg-surface text-on-surface-variant text-[11px] font-label-sm">Miami Region</span>
+</div>
+</td>
+</tr>
+<!-- Standard Row -->
+<tr class="hover:bg-surface-container-high transition-colors cursor-pointer group">
+<td class="py-3 pr-4 pl-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-container-highest text-on-surface flex items-center justify-center font-label-sm font-bold shrink-0">VT</div>
+<div>
+<div class="font-medium text-on-surface">Vanguard Tech Hubs</div>
+<div class="text-on-surface-variant text-[12px]">David Chen</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface">Expansion Lead</td>
+<td class="py-3 px-4 text-on-surface-variant font-label-sm">d.chen@vanguard.io</td>
+<td class="py-3 px-4 text-center">
+<div class="relative w-8 h-8 mx-auto flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e0e3e5" stroke-width="3"></path>
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#cba72f" stroke-dasharray="88, 100" stroke-width="3"></path>
+</svg>
+<span class="absolute text-[10px] font-label-sm font-bold text-on-surface">88</span>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface">Sarah Jenkins</td>
+<td class="py-3 pl-4">
+<div class="flex gap-1 flex-wrap">
+<span class="px-2 py-0.5 rounded border border-outline-variant bg-surface text-on-surface-variant text-[11px] font-label-sm">Industrial</span>
+<span class="px-2 py-0.5 rounded border border-outline-variant bg-surface text-on-surface-variant text-[11px] font-label-sm">Zoning QA</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- RIGHT PANE: Lead Profile Drawer (30%) -->
+<aside class="w-[30%] min-w-[360px] bg-surface-container-lowest border-l border-outline-variant flex flex-col shadow-[-4px_0_24px_rgba(0,0,0,0.02)] z-20">
+<!-- Priority Header (Level 3 Elevation style) -->
+<div class="border-t-4 border-t-tertiary-container p-stack-default flex flex-col gap-stack-compact relative shrink-0">
+<div class="flex justify-between items-start">
+<div class="w-16 h-16 rounded shadow-sm border border-divider overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="A close-up architectural detail of a modern, luxury corporate office building exterior. The image shows sleek glass panels reflecting a clear blue sky, intersected by sharp, minimalist gold-anodized aluminum mullions. The style is highly technical, institutional, and aspirational, fitting for a premium real estate firm." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB23qyxkEbRKJk6qOmOpSaBnuQnIWNsw50fEZqpnCDJ9lsvJECG5rOpNF52EPfhsxzbmDivu9xrSMz3D1XgyUmtAk96iFClXt4FXHoluraI-WwtYMitncYN5xhAcWZCLT9SwWDQtSf-h896t1eOLllz2Jns1CheA_IfD3WDvThmUEJIphwD-nH-yny8RUsfUeeI9kKovGyLZYsnhClGzlqlgWKdUBtN-1OOW1JJbOjPefQzJwKwwJrk"/>
+</div>
+<div class="flex gap-1">
+<button class="w-8 h-8 rounded hover:bg-surface-container transition-colors flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container transition-colors flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+<div class="mt-2">
+<h3 class="font-headline-md text-headline-md text-on-surface font-semibold tracking-tight">Aurelius Enterprises</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Julian Vance, Chief Executive Officer</p>
+</div>
+<div class="flex items-center gap-4 mt-2 font-label-sm text-label-sm text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">mail</span>
+<span>vance@aurelius.ent</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">phone</span>
+<span>+1 (555) 019-4822</span>
+</div>
+</div>
+</div>
+<!-- Scrollable Profile Content -->
+<div class="flex-1 overflow-y-auto p-stack-default flex flex-col gap-section-padding">
+<!-- Spatial Interests (Bento Style) -->
+<section class="flex flex-col gap-stack-default">
+<h4 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest font-semibold border-b border-divider pb-2">Spatial Asset Interests</h4>
+<div class="grid grid-cols-2 gap-2">
+<div class="rounded border border-outline-variant bg-surface overflow-hidden relative group">
+<div class="h-24 bg-surface-container-high relative">
+<div class="absolute inset-0 bg-cover bg-center opacity-80 mix-blend-multiply" data-alt="A stylized, minimalist 3D rendering of a commercial skyscraper in a dense urban environment, viewed from a slightly elevated angle. The building is rendered in monochromatic light gray tones with subtle geometric wireframes glowing faintly in gold, indicating structural analysis. The lighting is soft and analytical, emphasizing form over texture." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCfl0LjyY5bPh8c0qOEWjRAeCpW8qxBxNVW8G4fSBxky-NdthYNeq68FrHNQOVP2j0u1jegCcHu3i0N-qMRaVBQ1cymZG_d1_y4liQQ4Gq6wnmKteUf2lDlB9l03G9t38dbKj6gmoh9L9aKVXc_KDyITMhUfjxioWnraxDwz6i0Urtr6Fdwj-1z0KTUO5wc-MIfQ49UzqE0uVp5l910gqMVWntHiBLBec3Q82rh0tYH_B907CpEl3ra')"></div>
+<div class="absolute bottom-2 left-2 right-2 flex justify-between items-end">
+<span class="bg-primary/80 text-on-primary font-label-sm text-[10px] px-1.5 py-0.5 rounded backdrop-blur-sm">82% Match</span>
+<span class="material-symbols-outlined text-tertiary-container text-[16px] drop-shadow-md" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+</div>
+<div class="p-2">
+<div class="font-label-sm text-label-sm text-on-surface truncate font-semibold">Hudson Yards Tower B</div>
+<div class="text-[10px] text-on-surface-variant font-body-sm">Viewed 14 times</div>
+</div>
+</div>
+<div class="rounded border border-outline-variant bg-surface overflow-hidden relative group flex flex-col items-center justify-center p-4 hover:border-tertiary-container transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-outline-variant mb-2 text-2xl group-hover:text-tertiary-container transition-colors">add_location_alt</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-center leading-tight group-hover:text-on-surface">Map New<br/>Interest</span>
+</div>
+</div>
+</section>
+<!-- Interaction History (Timeline) -->
+<section class="flex flex-col gap-stack-default">
+<div class="flex justify-between items-end border-b border-divider pb-2">
+<h4 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest font-semibold">Interaction Ledger</h4>
+<span class="font-label-sm text-[10px] text-tertiary-container font-bold">Intent: HOT</span>
+</div>
+<div class="relative pl-4 space-y-6 before:absolute before:inset-y-0 before:left-[7px] before:w-px before:bg-divider">
+<!-- Timeline Item 1 -->
+<div class="relative">
+<div class="absolute -left-4 w-4 h-4 rounded-full bg-surface-container-lowest border-2 border-tertiary-container flex items-center justify-center z-10 shadow-[0_0_0_4px_#ffffff]">
+<div class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-baseline">
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">3D Tour Completed</span>
+<span class="font-label-sm text-[10px] text-on-surface-variant">Today, 09:42 AM</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Client spent 42 minutes in the 'Hudson Yards' spatial model. High dwell time detected on HVAC schematics.</p>
+</div>
+</div>
+<!-- Timeline Item 2 -->
+<div class="relative">
+<div class="absolute -left-4 w-4 h-4 rounded-full bg-surface-container-lowest border-2 border-outline-variant z-10 shadow-[0_0_0_4px_#ffffff]"></div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-baseline">
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">Executive Briefing</span>
+<span class="font-label-sm text-[10px] text-on-surface-variant">Oct 24, 2024</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Initial requirements gathering. Seeking 40,000 sqft Class A commercial space.</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Drawer Action Footer -->
+<div class="p-stack-default border-t border-divider bg-surface-container-lowest shrink-0">
+<button class="w-full bg-primary-container text-on-primary font-label-md text-label-md py-3 rounded uppercase tracking-wider font-bold hover:bg-primary transition-colors flex items-center justify-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span>
+                        Schedule Spatial Tour
+                    </button>
+</div>
+</aside>
+</main>
+<!-- Footer (Shared Component) - Rendered minimally at bottom of main if space allows, or omitted if split pane is tight. Decided to place below viewport if needed, but split-pane usually consumes 100% height. Let's make it a thin bar at the absolute bottom. -->
+<footer class="bg-surface-container-highest dark:bg-surface-container-highest w-full border-t border-outline-variant shrink-0 z-10">
+<div class="flex flex-col md:flex-row justify-between items-center px-grid-margin py-stack-compact w-full text-on-surface-variant">
+<span class="font-body-sm text-body-sm text-[12px]">© 2024 LUX-SPATIAL CRM. Institutional Grade Real Estate Intelligence.</span>
+<div class="flex gap-4 font-label-sm text-label-sm text-[11px]">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors" href="#">Security Architecture</a>
+<a class="hover:text-primary transition-colors" href="#">API Documentation</a>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

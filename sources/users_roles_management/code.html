@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LUX-SPATIAL | Users &amp; Roles</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#f7f9fb",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "surface-container-high": "#e6e8ea",
+                        "on-tertiary-container": "#4e3d00",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "surface-container": "#eceef0",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "surface-white": "#FFFFFF",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#44474d",
+                        "primary-container": "#0d1c32",
+                        "divider": "#E2E8F0",
+                        "primary-fixed": "#d6e3ff",
+                        "tertiary": "#735c00",
+                        "primary": "#000000",
+                        "surface-tint": "#515f78",
+                        "on-background": "#191c1e",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#0d1c32",
+                        "tertiary-fixed": "#ffe088",
+                        "on-tertiary-fixed": "#241a00",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-secondary-container": "#54647a",
+                        "secondary-fixed": "#d3e4fe",
+                        "surface-dim": "#d8dadc",
+                        "inverse-on-surface": "#eff1f3",
+                        "background": "#f7f9fb",
+                        "surface-variant": "#e0e3e5",
+                        "outline": "#75777e",
+                        "secondary-container": "#d0e1fb",
+                        "inverse-primary": "#b9c7e4",
+                        "on-secondary-fixed": "#0b1c30",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#b9c7e4",
+                        "surface-container-low": "#f2f4f6",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-fixed-dim": "#e9c349",
+                        "tertiary-container": "#cba72f",
+                        "on-primary": "#ffffff",
+                        "secondary": "#505f76",
+                        "outline-variant": "#c5c6cd",
+                        "error-container": "#ffdad6",
+                        "on-primary-container": "#76849f",
+                        "on-primary-fixed-variant": "#39475f",
+                        "on-surface": "#191c1e",
+                        "surface-bright": "#f7f9fb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "grid-margin": "2rem",
+                        "stack-default": "1rem",
+                        "stack-compact": "0.5rem",
+                        "gutter": "1.5rem",
+                        "section-padding": "3rem"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["IBM Plex Sans"],
+                        "headline-md": ["IBM Plex Sans"],
+                        "display-lg": ["IBM Plex Sans"],
+                        "label-md": ["JetBrains Mono"],
+                        "body-sm": ["Inter"],
+                        "label-sm": ["JetBrains Mono"],
+                        "headline-lg-mobile": ["IBM Plex Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "label-md": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "label-sm": ["11px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Glassmorphism utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        
+        /* Custom scrollbar for tables */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #E2E8F0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md h-full flex antialiased">
+<!-- SideNavBar (Shared Component) -->
+<nav class="hidden md:flex flex-col fixed left-0 top-0 h-full w-64 pt-16 pb-8 bg-surface-container-low border-r border-divider z-40 transition-transform duration-200 ease-in-out">
+<!-- Header -->
+<div class="px-grid-margin mb-8">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[20px]">domain</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight leading-none">LUX-SPATIAL</h1>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mt-1 block">Enterprise CRM</span>
+</div>
+</div>
+</div>
+<!-- CTA -->
+<div class="px-grid-margin mb-8">
+<button class="w-full bg-primary-container text-on-primary font-label-md text-label-md py-3 rounded hover:bg-on-background transition-colors flex items-center justify-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Transaction
+            </button>
+</div>
+<!-- Main Nav Links -->
+<div class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-highest hover:text-primary transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="domain">domain</span>
+                Portfolio
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-highest hover:text-primary transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="layers">layers</span>
+                Spatial Ingestion
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-highest hover:text-primary transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="account_tree">account_tree</span>
+                Pipelines
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-highest hover:text-primary transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="analytics">analytics</span>
+                Lead Analytics
+            </a>
+</div>
+<!-- Footer Nav Links (Active State: Users & Roles) -->
+<div class="mt-auto px-4 space-y-1">
+<div class="px-4 py-2 mb-2">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-widest">Administration</span>
+</div>
+<!-- ACTIVE TAB -->
+<a class="flex items-center gap-3 px-4 py-3 rounded bg-secondary-container text-on-secondary-container border-r-4 border-tertiary font-bold transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px] fill-icon" data-icon="manage_accounts">manage_accounts</span>
+                User &amp; Roles
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-highest hover:text-primary transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="policy">policy</span>
+                Security
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 ml-0 md:ml-64 flex flex-col min-h-screen">
+<!-- Top App Bar (Mobile Only for Nav, but acts as header on Desktop) -->
+<header class="h-16 border-b border-divider bg-surface-white px-grid-margin flex items-center justify-between sticky top-0 z-30">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-secondary hover:text-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="font-headline-md text-headline-md font-medium text-primary">User Management</h2>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="pl-10 pr-4 py-2 border border-divider rounded bg-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none font-body-sm text-body-sm w-64 transition-all" placeholder="Search users..." type="text"/>
+</div>
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden border border-divider cursor-pointer">
+<img alt="Executive User Profile" class="w-full h-full object-cover" data-alt="A professional headshot of an executive user in a modern office setting. The lighting is crisp and corporate, highlighting a sense of authority. Deep navy suit, subtle blurred architectural background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9Uh43su7fz_gHBVrMBVEY5Ku8xUMbczQF_Nt1oEG5B5Z4dJBZBTApNAdA6wZT344V6QxadFKS2ofSWsr7bpQMxGJviwzGSzLc3-Tfg0YoYJd7Ac1giWuOGdY8ZvB08sYkaEzBdBAYO9Did8fGq_cDlH7HopEqbiklF6STG-PZpyqthtVHacuBp1Ub1cQ9nBEm92TEb64zT1QKhW3Dve0TMKMi0m_dgUnHUOluaiRE1E_tghagDD7L"/>
+</div>
+</div>
+</header>
+<!-- Page Canvas -->
+<div class="flex-1 p-grid-margin overflow-y-auto">
+<!-- Context Header & Actions -->
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-2 py-0.5 rounded">Tenant ID: 994-Alpha</span>
+<span class="font-label-sm text-label-sm text-tertiary bg-tertiary-fixed px-2 py-0.5 rounded">Premium Tier</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-primary">Directory &amp; Access</h3>
+<p class="font-body-md text-body-md text-secondary mt-2 max-w-2xl">Manage administrative access, broker permissions, and geographical access controls across your enterprise portfolio.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 border border-divider rounded text-primary font-label-md text-label-md hover:bg-surface-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                        Export CSV
+                    </button>
+<!-- CTA Accent -->
+<button class="px-5 py-2 bg-tertiary-container text-on-tertiary-container font-label-md text-label-md rounded hover:opacity-90 transition-opacity flex items-center gap-2 shadow-sm font-semibold">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+                        Invite User
+                    </button>
+</div>
+</div>
+<!-- Bento Layout for Users & Policies -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-gutter">
+<!-- Main Users Table (Spans 2 columns on large screens) -->
+<div class="xl:col-span-2 bg-surface-white border border-divider rounded-lg shadow-sm overflow-hidden flex flex-col h-[600px]">
+<!-- Table Toolbar -->
+<div class="px-6 py-4 border-b border-divider flex items-center justify-between bg-surface-bright">
+<div class="flex gap-4">
+<select class="border border-divider rounded px-3 py-1.5 font-label-sm text-label-sm text-secondary bg-surface-white outline-none focus:border-primary-container">
+<option>All Roles</option>
+<option>Administrator</option>
+<option>Senior Broker</option>
+<option>Agent</option>
+</select>
+<select class="border border-divider rounded px-3 py-1.5 font-label-sm text-label-sm text-secondary bg-surface-white outline-none focus:border-primary-container">
+<option>All Statuses</option>
+<option>Active</option>
+<option>Pending</option>
+<option>Suspended</option>
+</select>
+</div>
+<div class="font-label-sm text-label-sm text-secondary">
+                            Showing 1-12 of 144
+                        </div>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto overflow-y-auto custom-scrollbar flex-1">
+<table class="w-full text-left border-collapse">
+<thead class="sticky top-0 bg-surface-container-lowest z-10 shadow-[0_1px_0_#E2E8F0]">
+<tr>
+<th class="px-6 py-3 font-label-sm text-label-sm text-outline uppercase tracking-wider font-medium">User</th>
+<th class="px-6 py-3 font-label-sm text-label-sm text-outline uppercase tracking-wider font-medium">Role &amp; Region</th>
+<th class="px-6 py-3 font-label-sm text-label-sm text-outline uppercase tracking-wider font-medium">Last Active</th>
+<th class="px-6 py-3 font-label-sm text-label-sm text-outline uppercase tracking-wider font-medium">Status</th>
+<th class="px-6 py-3 font-label-sm text-label-sm text-outline uppercase tracking-wider font-medium text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-divider">
+<!-- Row 1 (High Priority / Admin) -->
+<tr class="hover:bg-surface-container-low transition-colors group relative">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-label-md font-bold">
+                                                JD
+                                            </div>
+<div>
+<div class="font-body-sm text-body-sm font-medium text-primary">Jonathan Davies</div>
+<div class="font-body-sm text-body-sm text-secondary text-[12px]">j.davies@lux-spatial.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="font-label-md text-label-md text-primary">Enterprise Admin</div>
+<div class="font-label-sm text-label-sm text-secondary">Global</div>
+</td>
+<td class="px-6 py-4 font-body-sm text-body-sm text-secondary">
+                                        Just now
+                                    </td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-secondary-container text-on-secondary-container font-label-sm text-[10px] uppercase tracking-wider">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span> Active
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-secondary hover:text-primary p-1 rounded hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img alt="User" class="w-9 h-9 rounded object-cover border border-divider" data-alt="Corporate headshot of a female real estate broker. Crisp lighting, white background, wearing a tailored navy blazer. Professional, authoritative posture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDL74-zBl-TpCvIZO1UPcok2vjI7obnv4wSBF7AoBaLaH-MblTC_nC2liyP3zhlPR2eDANz9iOq8yk3gI5fp9ixdKz999EadILCqkI7iEdpDmvRVN-cERzmrdLBn8-_9FblI2d-JuPAKoU7RhxujTBNN94d0Iqo5iJZcYaOA2hNsiWVPgRA0aEpwCpFo0hgzteb5c6b42adYNNmfIaOiklKoNCw_qs0VEyquPNmX80U5wekLJ9O5T5R"/>
+<div>
+<div class="font-body-sm text-body-sm font-medium text-primary">Sarah Chen</div>
+<div class="font-body-sm text-body-sm text-secondary text-[12px]">schen@lux-spatial.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="font-label-md text-label-md text-primary">Senior Broker</div>
+<div class="font-label-sm text-label-sm text-secondary">North America</div>
+</td>
+<td class="px-6 py-4 font-body-sm text-body-sm text-secondary">
+                                        2 hours ago
+                                    </td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-secondary-container text-on-secondary-container font-label-sm text-[10px] uppercase tracking-wider">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span> Active
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-secondary hover:text-primary p-1 rounded hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded bg-surface-container text-secondary flex items-center justify-center font-label-md font-bold">
+                                                MR
+                                            </div>
+<div>
+<div class="font-body-sm text-body-sm font-medium text-primary">Marcus Reed</div>
+<div class="font-body-sm text-body-sm text-secondary text-[12px]">m.reed@partner-firm.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="font-label-md text-label-md text-primary">Agent</div>
+<div class="font-label-sm text-label-sm text-secondary">EMEA (Commercial)</div>
+</td>
+<td class="px-6 py-4 font-body-sm text-body-sm text-secondary">
+                                        1 day ago
+                                    </td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-surface-container-highest text-secondary font-label-sm text-[10px] uppercase tracking-wider">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> Offline
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-secondary hover:text-primary p-1 rounded hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 (Pending) -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3 opacity-60">
+<div class="w-9 h-9 rounded border border-dashed border-outline text-outline flex items-center justify-center font-label-md font-bold">
+                                                ?
+                                            </div>
+<div>
+<div class="font-body-sm text-body-sm font-medium text-primary">Elena Rostova</div>
+<div class="font-body-sm text-body-sm text-secondary text-[12px]">e.rostova@lux-spatial.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="font-label-md text-label-md text-primary">Analyst</div>
+<div class="font-label-sm text-label-sm text-secondary">APAC</div>
+</td>
+<td class="px-6 py-4 font-body-sm text-body-sm text-secondary">
+                                        Never
+                                    </td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-[10px] uppercase tracking-wider">
+<span class="material-symbols-outlined text-[12px]">schedule</span> Pending
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-secondary hover:text-primary font-label-sm text-label-sm mr-2 underline">Resend</button>
+<button class="text-secondary hover:text-primary p-1 rounded hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Access Control Policies Sidebar -->
+<div class="bg-surface-white border border-divider rounded-lg shadow-sm flex flex-col h-[600px]">
+<div class="px-6 py-4 border-b border-divider bg-primary-container text-on-primary rounded-t-lg">
+<h4 class="font-headline-md text-[18px] font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">security</span>
+                            Access Policies
+                        </h4>
+<p class="font-body-sm text-[12px] text-inverse-primary mt-1 opacity-80">Spatial data governance rules.</p>
+</div>
+<div class="p-4 flex-1 overflow-y-auto custom-scrollbar space-y-4">
+<!-- Policy Card 1 -->
+<div class="border border-divider rounded bg-surface p-4 relative overflow-hidden">
+<!-- Gold accent top border for high priority policy -->
+<div class="absolute top-0 left-0 w-full h-1 bg-tertiary-container"></div>
+<div class="flex justify-between items-start mb-3">
+<div>
+<div class="font-label-md text-label-md text-primary font-bold">North America - Prime</div>
+<div class="font-body-sm text-[12px] text-secondary mt-0.5">Asset Class: Commercial Office</div>
+</div>
+<span class="material-symbols-outlined text-tertiary text-[18px]">verified_user</span>
+</div>
+<div class="space-y-2 mt-4 pt-3 border-t border-divider">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline">Allowed Roles:</span>
+<span class="font-label-sm text-label-sm text-primary font-medium">Admin, Sr. Broker</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline">Data Resolution:</span>
+<span class="font-label-sm text-label-sm text-primary font-medium">LOD 400 (High)</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline">Export PII:</span>
+<span class="font-label-sm text-label-sm text-error font-medium">Restricted</span>
+</div>
+</div>
+<button class="mt-4 w-full py-1.5 border border-divider rounded text-secondary hover:text-primary hover:bg-surface-container transition-colors font-label-sm text-label-sm">
+                                Edit Policy
+                            </button>
+</div>
+<!-- Policy Card 2 -->
+<div class="border border-divider rounded bg-surface p-4">
+<div class="flex justify-between items-start mb-3">
+<div>
+<div class="font-label-md text-label-md text-primary font-bold">EMEA - Secondary</div>
+<div class="font-body-sm text-[12px] text-secondary mt-0.5">Asset Class: Industrial / Logistics</div>
+</div>
+<span class="material-symbols-outlined text-secondary text-[18px]">rule</span>
+</div>
+<div class="space-y-2 mt-4 pt-3 border-t border-divider">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline">Allowed Roles:</span>
+<span class="font-label-sm text-label-sm text-primary font-medium">All Roles</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline">Data Resolution:</span>
+<span class="font-label-sm text-label-sm text-primary font-medium">LOD 200 (Standard)</span>
+</div>
+</div>
+</div>
+<!-- Create New Policy -->
+<button class="w-full py-3 border border-dashed border-outline rounded text-secondary hover:text-primary hover:border-primary transition-all font-label-md text-label-md flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            Create Policy
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

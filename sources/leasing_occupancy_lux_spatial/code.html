@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Leasing &amp; Occupancy - LUX-SPATIAL CRM</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e6e8ea",
+                        "primary": "#000000",
+                        "inverse-on-surface": "#eff1f3",
+                        "tertiary-fixed": "#ffe088",
+                        "tertiary": "#735c00",
+                        "on-primary-container": "#76849f",
+                        "inverse-surface": "#2d3133",
+                        "primary-container": "#0d1c32",
+                        "surface-white": "#FFFFFF",
+                        "surface-tint": "#515f78",
+                        "on-secondary-container": "#54647a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#241a00",
+                        "on-primary-fixed-variant": "#39475f",
+                        "outline": "#75777e",
+                        "secondary-fixed": "#d3e4fe",
+                        "tertiary-fixed-dim": "#e9c349",
+                        "primary-fixed-dim": "#b9c7e4",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#191c1e",
+                        "surface-variant": "#e0e3e5",
+                        "on-background": "#191c1e",
+                        "tertiary-container": "#cba72f",
+                        "inverse-primary": "#b9c7e4",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "secondary": "#505f76",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-tertiary-container": "#4e3d00",
+                        "divider": "#E2E8F0",
+                        "surface-bright": "#f7f9fb",
+                        "on-secondary-fixed": "#0b1c30",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-dim": "#d8dadc",
+                        "surface-container": "#eceef0",
+                        "primary-fixed": "#d6e3ff",
+                        "on-primary-fixed": "#0d1c32",
+                        "on-tertiary": "#ffffff",
+                        "outline-variant": "#c5c6cd",
+                        "surface": "#f7f9fb",
+                        "on-surface-variant": "#44474d",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "on-primary": "#ffffff",
+                        "background": "#f7f9fb",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "secondary-container": "#d0e1fb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "section-padding": "3rem",
+                        "stack-compact": "0.5rem",
+                        "grid-margin": "2rem",
+                        "stack-default": "1rem",
+                        "gutter": "1.5rem"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "display-lg": ["IBM Plex Sans"],
+                        "label-md": ["JetBrains Mono"],
+                        "headline-md": ["IBM Plex Sans"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["IBM Plex Sans"],
+                        "headline-lg-mobile": ["IBM Plex Sans"],
+                        "label-sm": ["JetBrains Mono"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "label-md": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "label-sm": ["11px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid #E2E8F0;
+        }
+        .priority-border {
+            border-top: 4px solid #D4AF37; /* Gold accent */
+        }
+        .table-row-hover:hover {
+            background-color: #f2f4f6;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col md:flex-row">
+<!-- Side Navigation (Desktop) -->
+<nav class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant p-stack-default gap-stack-compact z-20">
+<div class="mb-stack-default">
+<h1 class="font-headline-md text-headline-md text-primary font-bold">Brokerage HQ</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Managing 24 Assets</p>
+</div>
+<div class="flex flex-col gap-2 flex-grow">
+<!-- Non-Active Nav Item -->
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">business_center</span>
+                Portfolio
+            </a>
+<!-- Non-Active Nav Item -->
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">data_exploration</span>
+                Spatial Ingestion
+            </a>
+<!-- Active Nav Item (Leasing falls under Portfolio/Pipeline, closest semantic match for standard JSON is Pipeline) -->
+<a class="flex items-center gap-stack-default bg-primary text-on-primary rounded-lg px-4 py-2 hover:bg-surface-container-high transition-all scale-95 font-label-md text-label-md shadow-sm" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+                Pipeline
+            </a>
+<!-- Non-Active Nav Item -->
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                Lead Analytics
+            </a>
+<!-- Non-Active Nav Item -->
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">view_in_ar</span>
+                3D Workspace
+            </a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg font-label-md text-label-md mt-auto" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</div>
+<button class="bg-[#D4AF37] text-[#0d1c32] font-label-md text-label-md font-bold py-3 rounded-lg w-full mt-4 hover:opacity-90 transition-opacity">Close Deal</button>
+<div class="mt-4 pt-4 border-t border-outline-variant flex flex-col gap-2">
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+                Support
+            </a>
+<a class="flex items-center gap-stack-default text-on-surface-variant px-4 py-2 hover:bg-surface-container-high transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">logout</span>
+                Sign Out
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- Top App Bar (Mobile & Contextual Desktop) -->
+<header class="bg-primary-container border-b border-outline-variant shadow-sm w-full z-10 sticky top-0">
+<div class="flex justify-between items-center w-full px-grid-margin py-stack-compact max-w-[1440px] mx-auto">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-on-primary-fixed">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="text-headline-md font-headline-md font-bold text-on-secondary hidden md:block">LUX-SPATIAL CRM</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-primary-container text-sm">search</span>
+<input class="pl-10 pr-4 py-2 rounded-full bg-surface-white/10 border border-outline-variant text-on-primary-fixed focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] outline-none text-sm placeholder:text-on-primary-container transition-all" placeholder="Search leases, units..." type="text"/>
+</div>
+<div class="flex items-center gap-4 text-on-primary-fixed">
+<button class="hover:bg-secondary-fixed-dim/10 transition-colors p-2 rounded-full"><span class="material-symbols-outlined">notifications</span></button>
+<button class="hover:bg-secondary-fixed-dim/10 transition-colors p-2 rounded-full"><span class="material-symbols-outlined">settings</span></button>
+<button class="hover:bg-secondary-fixed-dim/10 transition-colors p-2 rounded-full"><span class="material-symbols-outlined">help</span></button>
+<button class="bg-surface-white text-primary px-4 py-2 rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity hidden sm:block">Add Property</button>
+</div>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-grid-margin flex-1 flex flex-col gap-grid-margin max-w-[1440px] mx-auto w-full">
+<!-- Header Section -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+<div>
+<h2 class="font-display-lg text-display-lg text-primary">Leasing &amp; Occupancy</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2">Comprehensive overview of current leases, expirations, and space utilization.</p>
+</div>
+<div class="flex gap-3">
+<button class="border border-outline text-primary px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">download</span> Export
+                    </button>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span> New Lease
+                    </button>
+</div>
+</div>
+<!-- Occupancy Metrics Summary Bar -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="glass-panel p-6 rounded-xl flex flex-col gap-2">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total Occupancy</span>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-headline-lg text-primary">92%</span>
+<span class="font-body-sm text-body-sm text-[#059669] flex items-center"><span class="material-symbols-outlined text-[16px]">arrow_upward</span> 2.4%</span>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 92%"></div>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-xl flex flex-col gap-2">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Active Leases</span>
+<span class="font-display-lg text-headline-lg text-primary">128</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Across 4 properties</span>
+</div>
+<div class="glass-panel p-6 rounded-xl flex flex-col gap-2 priority-border">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Upcoming Expirations</span>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-headline-lg text-[#b45309]">12</span>
+<span class="font-body-sm text-body-sm text-error">&lt; 90 Days</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Requires immediate attention</span>
+</div>
+<div class="glass-panel p-6 rounded-xl flex flex-col gap-2">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total Monthly Rent</span>
+<span class="font-display-lg text-headline-lg text-primary">$1.4M</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Projected for current month</span>
+</div>
+</div>
+<!-- Data Table Section -->
+<div class="glass-panel rounded-xl overflow-hidden flex flex-col flex-1">
+<div class="p-4 border-b border-outline-variant bg-surface flex justify-between items-center">
+<h3 class="font-headline-md text-body-lg font-semibold text-primary">Lease Register</h3>
+<div class="flex gap-2">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">filter_list</span>
+<select class="pl-9 pr-8 py-1.5 rounded-md border border-outline-variant bg-surface-white text-body-sm focus:ring-1 focus:ring-primary outline-none appearance-none">
+<option>All Statuses</option>
+<option>Active</option>
+<option>Expiring Soon</option>
+</select>
+</div>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant bg-surface-bright text-on-surface-variant font-label-md text-label-sm uppercase tracking-wider">
+<th class="py-4 px-6 font-medium">Unit</th>
+<th class="py-4 px-6 font-medium">Tenant Contact</th>
+<th class="py-4 px-6 font-medium">Rent Amount</th>
+<th class="py-4 px-6 font-medium">Commencement</th>
+<th class="py-4 px-6 font-medium">Expiration</th>
+<th class="py-4 px-6 font-medium text-center">Encumbrances</th>
+<th class="py-4 px-6 font-medium text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm">
+<!-- Row 1: Normal -->
+<tr class="border-b border-outline-variant table-row-hover transition-colors">
+<td class="py-4 px-6 font-medium text-primary">Suite 400</td>
+<td class="py-4 px-6 text-on-surface-variant">Acme Corp (ID: TC-8492)</td>
+<td class="py-4 px-6 font-label-md">$12,500/mo</td>
+<td class="py-4 px-6 text-on-surface-variant">Jan 1, 2022</td>
+<td class="py-4 px-6 text-on-surface-variant">Dec 31, 2026</td>
+<td class="py-4 px-6 text-center">
+<span class="inline-flex items-center justify-center bg-surface-container-high text-on-surface-variant px-2 py-1 rounded text-[10px] font-label-md">None</span>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 2: Warning (Expiring < 90 Days) -->
+<tr class="border-b border-outline-variant table-row-hover transition-colors bg-tertiary-fixed/10">
+<td class="py-4 px-6 font-medium text-primary">Penthouse A</td>
+<td class="py-4 px-6 text-on-surface-variant">Stark Ind. (ID: TC-1104)</td>
+<td class="py-4 px-6 font-label-md">$45,000/mo</td>
+<td class="py-4 px-6 text-on-surface-variant">Mar 15, 2019</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2">
+<span class="text-[#b45309] font-medium">Nov 30, 2024</span>
+<span class="inline-flex items-center gap-1 bg-[#fef3c7] text-[#92400e] px-2 py-0.5 rounded-full font-label-sm text-[10px]">
+<span class="material-symbols-outlined text-[12px]">warning</span> 45 Days
+                                        </span>
+</div>
+</td>
+<td class="py-4 px-6 text-center">
+<span class="inline-flex items-center justify-center bg-surface-container-high text-on-surface-variant px-2 py-1 rounded text-[10px] font-label-md">None</span>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 3: Encumbrance -->
+<tr class="border-b border-outline-variant table-row-hover transition-colors">
+<td class="py-4 px-6 font-medium text-primary">Retail 101</td>
+<td class="py-4 px-6 text-on-surface-variant">Bean Roasters (ID: TC-3321)</td>
+<td class="py-4 px-6 font-label-md">$8,200/mo</td>
+<td class="py-4 px-6 text-on-surface-variant">Jun 1, 2023</td>
+<td class="py-4 px-6 text-on-surface-variant">May 31, 2028</td>
+<td class="py-4 px-6 text-center">
+<div class="relative group inline-block">
+<span class="inline-flex items-center justify-center bg-error-container text-on-error-container px-2 py-1 rounded text-[10px] font-label-md cursor-help border border-error/20">ROFR</span>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-48 bg-inverse-surface text-inverse-on-surface text-[11px] p-2 rounded shadow-lg z-10 text-left">
+                                            Right of First Refusal on adjacent Unit 102.
+                                        </div>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 4: Normal -->
+<tr class="border-b border-outline-variant table-row-hover transition-colors">
+<td class="py-4 px-6 font-medium text-primary">Suite 250</td>
+<td class="py-4 px-6 text-on-surface-variant">Globex (ID: TC-9921)</td>
+<td class="py-4 px-6 font-label-md">$15,000/mo</td>
+<td class="py-4 px-6 text-on-surface-variant">Oct 1, 2023</td>
+<td class="py-4 px-6 text-on-surface-variant">Sep 30, 2030</td>
+<td class="py-4 px-6 text-center">
+<span class="inline-flex items-center justify-center bg-surface-container-high text-on-surface-variant px-2 py-1 rounded text-[10px] font-label-md">None</span>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 border-t border-outline-variant bg-surface flex justify-between items-center text-on-surface-variant font-body-sm text-body-sm">
+<span>Showing 1-4 of 128 leases</span>
+<div class="flex items-center gap-4">
+<button class="hover:text-primary disabled:opacity-50" disabled="">&lt; Prev</button>
+<span class="font-label-md">Page 1 of 32</span>
+<button class="hover:text-primary">Next &gt;</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container-highest border-t border-outline-variant mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center px-grid-margin py-stack-default w-full max-w-[1440px] mx-auto">
+<span class="font-body-sm text-body-sm text-on-surface-variant mb-4 md:mb-0">© 2024 LUX-SPATIAL CRM. Institutional Grade Real Estate Intelligence.</span>
+<div class="flex gap-4">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Security Architecture</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">API Documentation</a>
+</div>
+</div>
+</footer>
+</main>
+</body></html>
