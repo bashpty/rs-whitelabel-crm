@@ -1,188 +1,153 @@
 import { useState } from 'react'
-import { Plus, Filter, MapPin, MoreVertical, Lock, ExternalLink } from 'lucide-react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import { Building2, Layers, TrendingUp, Users, Plus } from 'lucide-react'
+import { projectsApi, unitsApi } from '../lib/api.js'
+import Pagination from '../components/ui/Pagination.jsx'
+import Modal from '../components/ui/Modal.jsx'
+import FormField from '../components/ui/FormField.jsx'
 
-const proyectos = [
-  {
-    id: 'PRJ-001',
-    nombre: 'Aura Residences – Torre A',
-    ubicacion: 'Dubai Marina',
-    estado: 'En Construcción',
-    estadoColor: 'text-accent',
-    estadoDot: 'bg-accent',
-    masterplan: 'Masterplan V3.2',
-    unidades: [
-      { id: '#PH-401', tipo: 'Penthouse Suite',  precio: '$4,250,000', estado: 'DISPONIBLE', estadoColor: 'text-accent' },
-      { id: '#40-12A', tipo: 'Esquina 3 Hab.',   precio: '$1,850,000', estado: 'RESERVADA / Exp: 48h', estadoColor: 'text-warning', reservada: true },
-      { id: '#39-01',  tipo: 'Estándar 2 Hab.',  precio: '$1,100,000', estado: 'VENDIDA', estadoColor: 'text-error', vendida: true },
-      { id: '#38-06',  tipo: 'Studio Luxury',    precio: '$780,000',   estado: 'DISPONIBLE', estadoColor: 'text-accent' },
-    ],
-  },
-  {
-    id: 'PRJ-002',
-    nombre: 'The Vertex Estate',
-    ubicacion: 'Ginebra, Suiza',
-    estado: 'Pre-construcción',
-    estadoColor: 'text-info',
-    estadoDot: 'bg-info',
-    masterplan: 'Fase Conceptual',
-    unidades: [],
-    locked: true,
-  },
-  {
-    id: 'PRJ-003',
-    nombre: 'Pinnacle Tower – Fase II',
-    ubicacion: 'Manhattan, NY',
-    estado: 'Planificación',
-    estadoColor: 'text-secondary',
-    estadoDot: 'bg-secondary',
-    masterplan: 'Masterplan V1.0',
-    unidades: [
-      { id: '#FL-10A', tipo: 'Oficina Premium', precio: '$3,100,000', estado: 'DISPONIBLE', estadoColor: 'text-accent' },
-      { id: '#FL-10B', tipo: 'Oficina Estándar', precio: '$1,900,000', estado: 'DISPONIBLE', estadoColor: 'text-accent' },
-    ],
-  },
-]
+const PROJECT_STATUSES = ['PLANNING', 'UNDER_CONSTRUCTION', 'COMPLETED', 'ON_HOLD', 'CANCELLED']
+const UNIT_STATUSES = ['AVAILABLE', 'RESERVED', 'SOLD', 'LEASED']
+const statusBadge = { PLANNING: 'bg-base-200 text-secondary', UNDER_CONSTRUCTION: 'bg-warning/10 text-warning', COMPLETED: 'bg-success/10 text-success', ON_HOLD: 'bg-error/10 text-error', CANCELLED: 'bg-error/10 text-error' }
 
-const estadoUnitBg = {
-  'DISPONIBLE': 'bg-base-200',
-  'VENDIDA': 'bg-base-200 opacity-60',
+function ProjectForm({ onSuccess, onClose, defaultValues }) {
+  const qc = useQueryClient()
+  const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm({ defaultValues })
+  const mutation = useMutation({
+    mutationFn: (data) => defaultValues?.id ? projectsApi.update(defaultValues.id, data) : projectsApi.create(data),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['projects'] }); onSuccess?.() },
+    onError: (e) => setError('root', { message: e.message }),
+  })
+  return (
+    <form onSubmit={handleSubmit((d) => mutation.mutate(d))} className="space-y-4">
+      {errors.root && <div className="p-3 bg-error/10 border border-error/20 rounded text-xs text-error">{errors.root.message}</div>}
+      <FormField label="Nombre del Proyecto" required error={errors.name?.message}>
+        <input {...register('name', { required: 'El nombre es obligatorio' })} className="input input-sm w-full bg-base-100 border-base-300" placeholder="Torre Norte Fase 2" />
+      </FormField>
+      <FormField label="Estado" error={errors.status?.message}>
+        <select {...register('status')} className="select select-sm w-full bg-base-100 border-base-300">
+          <option value="">Seleccionar…</option>
+          {PROJECT_STATUSES.map((s) => <option key={s}>{s}</option>)}
+        </select>
+      </FormField>
+      <div className="grid grid-cols-2 gap-3">
+        <FormField label="Inicio" error={errors.startDate?.message}>
+          <input {...register('startDate')} type="date" className="input input-sm w-full bg-base-100 border-base-300" />
+        </FormField>
+        <FormField label="Fin Esperado" error={errors.expectedEndDate?.message}>
+          <input {...register('expectedEndDate')} type="date" className="input input-sm w-full bg-base-100 border-base-300" />
+        </FormField>
+      </div>
+      <FormField label="Presupuesto Total (USD)" error={errors.totalBudget?.message}>
+        <input {...register('totalBudget', { valueAsNumber: true, min: { value: 0, message: 'Debe ser positivo' } })} type="number" className="input input-sm w-full bg-base-100 border-base-300" />
+      </FormField>
+      <div className="flex justify-end gap-2 pt-2">
+        <button type="button" onClick={onClose} className="btn btn-ghost btn-sm font-display">Cancelar</button>
+        <button type="submit" disabled={isSubmitting} className="btn btn-accent btn-sm font-display">{isSubmitting ? 'Guardando…' : defaultValues?.id ? 'Actualizar' : 'Crear Proyecto'}</button>
+      </div>
+    </form>
+  )
 }
 
 export default function ProjectControl() {
-  const [selected, setSelected] = useState(null)
+  const [projPage, setProjPage] = useState(1)
+  const [unitPage, setUnitPage] = useState(1)
+  const [modal, setModal] = useState(null)
+  const qc = useQueryClient()
+
+  const { data: projData, isLoading: projLoading } = useQuery({
+    queryKey: ['projects', projPage],
+    queryFn: () => projectsApi.list({ page: projPage, limit: 10 }),
+  })
+  const { data: unitData, isLoading: unitLoading } = useQuery({
+    queryKey: ['units', unitPage],
+    queryFn: () => unitsApi.list({ page: unitPage, limit: 15 }),
+  })
+  const deleteProj = useMutation({ mutationFn: (id) => projectsApi.remove(id), onSuccess: () => qc.invalidateQueries({ queryKey: ['projects'] }) })
+
+  const projects = projData?.data ?? []
+  const units = unitData?.data ?? []
+  const projMeta = projData?.meta
+  const unitMeta = unitData?.meta
+
+  const kpis = [
+    { titulo: 'Proyectos', valor: projMeta?.total ?? '—', icon: Building2 },
+    { titulo: 'En Construcción', valor: projects.filter((p) => p.status === 'UNDER_CONSTRUCTION').length, icon: TrendingUp },
+    { titulo: 'Unidades', valor: unitMeta?.total ?? '—', icon: Layers },
+    { titulo: 'Disponibles', valor: units.filter((u) => u.status === 'AVAILABLE').length, icon: Users },
+  ]
 
   return (
     <div className="space-y-5">
-      {/* ── Header ─────────────────────────────────────── */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-display font-semibold text-primary leading-tight">
-            Control de Desarrollo
-          </h1>
-          <p className="text-sm text-secondary mt-0.5">
-            Proyectos macro · Inventario de unidades espaciales · Estatus de avance
-          </p>
+          <h1 className="text-2xl font-display font-semibold text-primary leading-tight">Control de Proyectos</h1>
+          <p className="text-sm text-secondary mt-0.5">Gestión de proyectos de desarrollo inmobiliario</p>
         </div>
-        <div className="flex items-center gap-2">
-          <button className="btn btn-sm btn-ghost border border-base-300 font-display gap-1.5">
-            <Filter className="w-3.5 h-3.5" />
-            Filtrar
-          </button>
-          <button className="btn btn-accent btn-sm font-display gap-1.5">
-            <Plus className="w-4 h-4" />
-            Nuevo Proyecto
-          </button>
-        </div>
+        <button onClick={() => setModal({ mode: 'create' })} className="btn btn-accent btn-sm font-display gap-1.5"><Plus className="w-4 h-4" /> Nuevo Proyecto</button>
       </div>
-
-      {/* ── Projects Grid ──────────────────────────────── */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-        {proyectos.map((p) => (
-          <article
-            key={p.id}
-            className="bg-base-100 border border-base-300 rounded-lg overflow-hidden flex flex-col hover:shadow-md transition-shadow"
-          >
-            {/* Project Header */}
-            <div className="p-4 border-b border-base-300 bg-base-200">
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className={`flex items-center gap-1.5 font-mono-crm text-[10px] uppercase tracking-wider font-medium ${p.estadoColor}`}>
-                      <span className={`w-1.5 h-1.5 rounded-full ${p.estadoDot} ${p.estado === 'En Construcción' ? 'animate-pulse' : ''}`} />
-                      {p.estado}
-                    </span>
-                    <span className="font-mono-crm text-[9px] text-secondary bg-base-300 px-2 py-0.5 rounded">{p.masterplan}</span>
-                  </div>
-                  <h2 className="font-display font-semibold text-base text-primary leading-tight">{p.nombre}</h2>
-                  <div className="flex items-center gap-1 mt-1 text-secondary">
-                    <MapPin className="w-3 h-3" />
-                    <span className="font-mono-crm text-[10px]">{p.ubicacion}</span>
-                  </div>
-                </div>
-                <button className="btn btn-ghost btn-xs btn-circle">
-                  <MoreVertical className="w-3.5 h-3.5 text-secondary" />
-                </button>
-              </div>
-            </div>
-
-            {/* Unit Inventory */}
-            <div className="p-4 flex-1">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-display font-semibold text-xs text-primary uppercase tracking-wider">Inventario de Unidades</h3>
-                <button className="flex items-center gap-1 font-mono-crm text-[10px] text-accent hover:underline">
-                  {p.locked ? 'Mapa Espacial' : 'Ver Masterplan'}
-                  <ExternalLink className="w-3 h-3" />
-                </button>
-              </div>
-
-              {p.locked ? (
-                <div className="border border-dashed border-base-300 rounded-lg p-8 flex flex-col items-center justify-center text-center">
-                  <Lock className="w-8 h-8 text-base-300 mb-2" />
-                  <h4 className="font-display font-semibold text-xs text-primary mb-1">Pre-ventas Bloqueadas</h4>
-                  <p className="font-mono-crm text-[10px] text-secondary max-w-xs leading-relaxed">
-                    Asignación de unidades restringida pendiente de aprobaciones municipales.
-                  </p>
-                  <button className="btn btn-xs btn-ghost border border-base-300 font-display mt-3">
-                    Solicitar Acceso Anticipado
-                  </button>
-                </div>
-              ) : (
-                <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
-                  {p.unidades.map((u) => (
-                    <div
-                      key={u.id}
-                      className={`flex items-center justify-between p-2.5 border border-base-300 rounded transition-colors hover:border-accent/30 ${u.vendida ? 'opacity-60 bg-base-200' : 'bg-base-100'}`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <span className={`font-mono-crm text-[10px] px-2 py-0.5 rounded ${u.vendida ? 'bg-base-300 text-secondary line-through' : 'bg-base-200 text-primary'}`}>
-                          {u.id}
-                        </span>
-                        <span className="font-display text-xs text-primary">{u.tipo}</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="text-right">
-                          <div className="font-display font-semibold text-xs text-primary">{u.precio}</div>
-                          <div className={`font-mono-crm text-[9px] ${u.estadoColor}`}>{u.estado}</div>
-                        </div>
-                        {u.vendida ? (
-                          <button disabled className="btn btn-ghost btn-xs btn-circle opacity-40">
-                            <Lock className="w-3 h-3" />
-                          </button>
-                        ) : (
-                          <button className="btn btn-ghost btn-xs btn-circle">
-                            <MoreVertical className="w-3.5 h-3.5 text-secondary" />
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-
-                  {p.unidades.length === 0 && (
-                    <div className="text-center py-6">
-                      <span className="font-mono-crm text-[10px] text-secondary">Sin unidades registradas</span>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Footer */}
-            <div className="px-4 py-2.5 border-t border-base-300 bg-base-200 flex justify-between items-center">
-              <span className="font-mono-crm text-[9px] text-secondary">{p.id}</span>
-              {!p.locked && (
-                <div className="flex items-center gap-3">
-                  <span className="font-mono-crm text-[9px] text-accent">
-                    {p.unidades.filter((u) => u.estado === 'DISPONIBLE').length} disponibles
-                  </span>
-                  <span className="font-mono-crm text-[9px] text-error">
-                    {p.unidades.filter((u) => u.vendida).length} vendidas
-                  </span>
-                </div>
-              )}
-            </div>
-          </article>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {kpis.map((k) => (
+          <div key={k.titulo} className="stat bg-base-100 border border-base-300 rounded-lg p-4">
+            <div className="flex justify-between items-start"><div className="stat-title font-mono-crm text-[10px] tracking-widest uppercase text-secondary">{k.titulo}</div><k.icon className="w-4 h-4 text-secondary" /></div>
+            <div className="stat-value font-display text-xl text-primary mt-1">{k.valor}</div>
+          </div>
         ))}
       </div>
+
+      <div className="bg-base-100 border border-base-300 rounded-lg overflow-hidden">
+        <div className="px-4 py-3 border-b border-base-300 bg-base-200"><span className="font-mono-crm text-[10px] uppercase tracking-widest text-secondary">Proyectos</span></div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead><tr className="border-b border-base-300 bg-base-200">{['Nombre', 'Estado', 'Presupuesto', 'Inicio', 'Fin Esperado', ''].map((h) => <th key={h} className="px-4 py-2.5 font-mono-crm text-[9px] uppercase tracking-widest text-secondary font-medium">{h}</th>)}</tr></thead>
+            <tbody className="divide-y divide-base-300">
+              {projLoading && <tr><td colSpan={6} className="text-center py-8 text-secondary font-mono-crm text-xs">Cargando…</td></tr>}
+              {projects.map((p) => (
+                <tr key={p.id} className="hover:bg-base-200 transition-colors">
+                  <td className="px-4 py-3 font-display font-medium text-xs text-primary">{p.name}</td>
+                  <td className="px-4 py-3"><span className={`font-mono-crm text-[9px] uppercase tracking-wider px-2 py-0.5 rounded ${statusBadge[p.status] ?? 'bg-base-200 text-secondary'}`}>{p.status ?? '—'}</span></td>
+                  <td className="px-4 py-3 font-mono-crm text-[10px] text-primary">{p.totalBudget != null ? `$${Number(p.totalBudget).toLocaleString()}` : '—'}</td>
+                  <td className="px-4 py-3 font-mono-crm text-[10px] text-secondary">{p.startDate ? new Date(p.startDate).toLocaleDateString() : '—'}</td>
+                  <td className="px-4 py-3 font-mono-crm text-[10px] text-secondary">{p.expectedEndDate ? new Date(p.expectedEndDate).toLocaleDateString() : '—'}</td>
+                  <td className="px-4 py-3 text-right">
+                    <button onClick={() => setModal({ mode: 'edit', project: p })} className="btn btn-ghost btn-xs mr-1 font-mono-crm">Editar</button>
+                    <button onClick={() => { if (window.confirm('¿Eliminar proyecto?')) deleteProj.mutate(p.id) }} className="btn btn-ghost btn-xs text-error font-mono-crm">Eliminar</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Pagination meta={projMeta} onPageChange={setProjPage} />
+      </div>
+
+      <div className="bg-base-100 border border-base-300 rounded-lg overflow-hidden">
+        <div className="px-4 py-3 border-b border-base-300 bg-base-200"><span className="font-mono-crm text-[10px] uppercase tracking-widest text-secondary">Unidades</span></div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead><tr className="border-b border-base-300 bg-base-200">{['Unidad', 'Tipo', 'Piso', 'Área (m²)', 'Precio', 'Estado'].map((h) => <th key={h} className="px-4 py-2.5 font-mono-crm text-[9px] uppercase tracking-widest text-secondary font-medium">{h}</th>)}</tr></thead>
+            <tbody className="divide-y divide-base-300">
+              {unitLoading && <tr><td colSpan={6} className="text-center py-8 text-secondary font-mono-crm text-xs">Cargando…</td></tr>}
+              {units.map((u) => (
+                <tr key={u.id} className="hover:bg-base-200 transition-colors">
+                  <td className="px-4 py-3 font-display font-medium text-xs text-primary">{u.unitNumber ?? u.id?.slice(0, 8)}</td>
+                  <td className="px-4 py-3 font-mono-crm text-[10px] text-secondary">{u.type ?? '—'}</td>
+                  <td className="px-4 py-3 font-mono-crm text-[10px] text-secondary">{u.floor ?? '—'}</td>
+                  <td className="px-4 py-3 font-mono-crm text-[10px] text-secondary">{u.areaSqm ?? '—'}</td>
+                  <td className="px-4 py-3 font-mono-crm text-[10px] text-primary">{u.price != null ? `$${Number(u.price).toLocaleString()}` : '—'}</td>
+                  <td className="px-4 py-3 font-mono-crm text-[10px] text-secondary">{u.status ?? '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Pagination meta={unitMeta} onPageChange={setUnitPage} />
+      </div>
+
+      <Modal open={!!modal} onClose={() => setModal(null)} title={modal?.mode === 'edit' ? 'Editar Proyecto' : 'Nuevo Proyecto'}>
+        <ProjectForm defaultValues={modal?.project} onClose={() => setModal(null)} onSuccess={() => setModal(null)} />
+      </Modal>
     </div>
   )
 }

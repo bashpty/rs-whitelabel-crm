@@ -1,224 +1,127 @@
 import { useState } from 'react'
-import { TrendingUp, TrendingDown, Megaphone, Users, BarChart2, DollarSign, Plus, Filter, ArrowUpRight } from 'lucide-react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import { Megaphone, Users, DollarSign, BarChart2, Plus } from 'lucide-react'
+import { campaignsApi } from '../lib/api.js'
+import Pagination from '../components/ui/Pagination.jsx'
+import Modal from '../components/ui/Modal.jsx'
+import FormField from '../components/ui/FormField.jsx'
 
-const kpis = [
-  { label: 'Presupuesto Activo Total', value: '$4.2M', trend: '+12.5% vs Q2', up: true, icon: DollarSign },
-  { label: 'Campañas Activas',         value: '14',    trend: 'En 3 regiones',   up: null, icon: Megaphone },
-  { label: 'Impresiones Totales',      value: '12.8M', trend: '+8.2% vs Q2',  up: true, icon: BarChart2 },
-  { label: 'Tasa de Conversión',       value: '4.2%',  trend: '-0.5% vs Q2',  up: false, icon: Users },
-]
+const CAMPAIGN_TYPES = ['DRIP_EMAIL', 'SMS', 'DIRECT_MAIL', 'SOCIAL']
+const CAMPAIGN_STATUSES = ['DRAFT', 'ACTIVE', 'PAUSED', 'COMPLETED', 'ARCHIVED']
+const typeBadge = { DRIP_EMAIL: 'bg-accent/10 text-accent', SMS: 'bg-primary/10 text-primary', DIRECT_MAIL: 'bg-warning/10 text-warning', SOCIAL: 'bg-success/10 text-success' }
 
-const campaigns = [
-  {
-    id: 'C-001',
-    nombre: "Q3 'The Pinnacle' Pre-Lease",
-    descripcion: 'Campaña LinkedIn e Instagram dirigida a HNW para pre-arrendamiento de penthouse en Manhattan.',
-    estado: 'ACTIVA',
-    canal: 'SOCIAL',
-    presupuesto: '$450,000',
-    cpa: '$1,200',
-    performance: [30, 45, 60, 85, 100],
-    gold: true,
-  },
-  {
-    id: 'C-002',
-    nombre: 'Investor Q2 Briefing',
-    descripcion: 'Newsletter trimestral sobre rendimiento del portafolio, actualizaciones espaciales y oportunidades de activos en distress.',
-    estado: 'BORRADOR',
-    canal: 'EMAIL',
-    presupuesto: '$15,000',
-    cpa: '—',
-    performance: [],
-    gold: false,
-  },
-  {
-    id: 'C-003',
-    nombre: 'Miami Commercial Expo',
-    descripcion: 'Anuncios móviles geo-cercados y secuencias de email de seguimiento para asistentes del Q3 Real Estate Expo.',
-    estado: 'ACTIVA',
-    canal: 'MULTI-CANAL',
-    presupuesto: '$85,000',
-    cpa: '$800',
-    performance: [40, 55, 50, 70, 65],
-    gold: false,
-  },
-  {
-    id: 'C-004',
-    nombre: 'Geneva Vertex Pre-Sales',
-    descripcion: 'Lanzamiento de pre-ventas para The Vertex Estate en Ginebra. Medios premium y relaciones públicas institucionales.',
-    estado: 'PLANIFICADA',
-    canal: 'PR + DIGITAL',
-    presupuesto: '$200,000',
-    cpa: '$2,500',
-    performance: [],
-    gold: false,
-  },
-  {
-    id: 'C-005',
-    nombre: 'Dubai Aura Residences Launch',
-    descripcion: 'Campaña de lanzamiento de alta visibilidad para Torre A en Dubai Marina. Vídeo cinematic + paid social.',
-    estado: 'ACTIVA',
-    canal: 'SOCIAL + VIDEO',
-    presupuesto: '$620,000',
-    cpa: '$980',
-    performance: [20, 35, 58, 72, 90],
-    gold: true,
-  },
-  {
-    id: 'C-006',
-    nombre: 'Lease Renewal Drive – EMEA',
-    descripcion: 'Campaña de retención y renovación para cartera EMEA con vencimientos en los próximos 90 días.',
-    estado: 'ACTIVA',
-    canal: 'EMAIL',
-    presupuesto: '$32,000',
-    cpa: '$450',
-    performance: [60, 70, 75, 80, 85],
-    gold: false,
-  },
-]
-
-const estadoClases = {
-  ACTIVA:      'bg-accent/10 text-accent border border-accent/30',
-  BORRADOR:    'bg-base-200 text-secondary border border-base-300',
-  PLANIFICADA: 'bg-base-200 text-secondary border border-base-300',
+function CampaignForm({ onSuccess, onClose, defaultValues }) {
+  const qc = useQueryClient()
+  const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm({ defaultValues })
+  const mutation = useMutation({
+    mutationFn: (data) => defaultValues?.id ? campaignsApi.update(defaultValues.id, data) : campaignsApi.create(data),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['campaigns'] }); onSuccess?.() },
+    onError: (e) => setError('root', { message: e.message }),
+  })
+  return (
+    <form onSubmit={handleSubmit((d) => mutation.mutate(d))} className="space-y-4">
+      {errors.root && <div className="p-3 bg-error/10 border border-error/20 rounded text-xs text-error">{errors.root.message}</div>}
+      <FormField label="Nombre de la Campaña" required error={errors.name?.message}>
+        <input {...register('name', { required: 'El nombre es obligatorio' })} className="input input-sm w-full bg-base-100 border-base-300" placeholder="Campaña Q4 2025" />
+      </FormField>
+      <FormField label="Tipo" required error={errors.type?.message}>
+        <select {...register('type', { required: 'El tipo es obligatorio' })} className="select select-sm w-full bg-base-100 border-base-300">
+          <option value="">Seleccionar…</option>
+          {CAMPAIGN_TYPES.map((t) => <option key={t}>{t}</option>)}
+        </select>
+      </FormField>
+      <FormField label="Estado" error={errors.status?.message}>
+        <select {...register('status')} className="select select-sm w-full bg-base-100 border-base-300">
+          <option value="">Seleccionar…</option>
+          {CAMPAIGN_STATUSES.map((s) => <option key={s}>{s}</option>)}
+        </select>
+      </FormField>
+      <div className="grid grid-cols-2 gap-3">
+        <FormField label="Presupuesto (USD)" error={errors.budget?.message}>
+          <input {...register('budget', { valueAsNumber: true, min: { value: 0, message: 'Debe ser positivo' } })} type="number" className="input input-sm w-full bg-base-100 border-base-300" placeholder="5000" />
+        </FormField>
+        <FormField label="Fecha de Inicio" error={errors.startDate?.message}>
+          <input {...register('startDate')} type="date" className="input input-sm w-full bg-base-100 border-base-300" />
+        </FormField>
+      </div>
+      <FormField label="Fecha de Fin" error={errors.endDate?.message}>
+        <input {...register('endDate')} type="date" className="input input-sm w-full bg-base-100 border-base-300" />
+      </FormField>
+      <div className="flex justify-end gap-2 pt-2">
+        <button type="button" onClick={onClose} className="btn btn-ghost btn-sm font-display">Cancelar</button>
+        <button type="submit" disabled={isSubmitting} className="btn btn-accent btn-sm font-display">{isSubmitting ? 'Guardando…' : defaultValues?.id ? 'Actualizar' : 'Crear Campaña'}</button>
+      </div>
+    </form>
+  )
 }
 
-const MiniChart = ({ bars }) => (
-  <div className="h-12 flex items-end gap-0.5 w-full bg-base-200 p-1.5 rounded border border-base-300">
-    {bars.map((h, i) => (
-      <div
-        key={i}
-        className="flex-1 rounded-t transition-all"
-        style={{
-          height: `${h}%`,
-          background: i === bars.length - 1 ? 'hsl(var(--a))' : 'hsl(var(--p)/0.3)',
-        }}
-      />
-    ))}
-  </div>
-)
-
 export default function CampaignManagement() {
-  const [filtro, setFiltro] = useState('TODAS')
+  const [page, setPage] = useState(1)
+  const [modal, setModal] = useState(null)
+  const qc = useQueryClient()
 
-  const filtradas = filtro === 'TODAS' ? campaigns : campaigns.filter((c) => c.estado === filtro)
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['campaigns', page],
+    queryFn: () => campaignsApi.list({ page, limit: 12 }),
+  })
+  const deleteMutation = useMutation({ mutationFn: (id) => campaignsApi.remove(id), onSuccess: () => qc.invalidateQueries({ queryKey: ['campaigns'] }) })
+
+  const campaigns = data?.data ?? []
+  const meta = data?.meta
+
+  const kpis = [
+    { titulo: 'Total Campañas', valor: meta?.total ?? '—', icon: Megaphone },
+    { titulo: 'Activas', valor: campaigns.filter((c) => c.status === 'ACTIVE').length, icon: BarChart2 },
+    { titulo: 'Presupuesto Total', valor: `$${campaigns.reduce((s, c) => s + (c.budget ?? 0), 0).toLocaleString()}`, icon: DollarSign },
+    { titulo: 'Tipos Únicos', valor: new Set(campaigns.map((c) => c.type)).size, icon: Users },
+  ]
 
   return (
     <div className="space-y-5">
-      {/* ── Header ─────────────────────────────────────── */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-display font-semibold text-primary leading-tight">
-            Orquestación de Campañas
-          </h1>
-          <p className="text-sm text-secondary mt-0.5">
-            Campañas de marketing multi-canal · Generación de leads de alto valor
-          </p>
+          <h1 className="text-2xl font-display font-semibold text-primary leading-tight">Gestión de Campañas</h1>
+          <p className="text-sm text-secondary mt-0.5">Orquestación de campañas de marketing</p>
         </div>
-        <button className="btn btn-accent btn-sm font-display flex-shrink-0 gap-1.5">
-          <Plus className="w-4 h-4" />
-          Nueva Campaña
-        </button>
+        <button onClick={() => setModal({ mode: 'create' })} className="btn btn-accent btn-sm font-display gap-1.5"><Plus className="w-4 h-4" /> Nueva Campaña</button>
       </div>
-
-      {/* ── KPIs ───────────────────────────────────────── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {kpis.map((k) => (
-          <div key={k.label} className="stat bg-base-100 border border-base-300 rounded-lg p-4">
-            <div className="flex justify-between items-start">
-              <div className="stat-title font-mono-crm text-[10px] tracking-widest uppercase text-secondary leading-tight">
-                {k.label}
-              </div>
-              <k.icon className="w-4 h-4 text-secondary flex-shrink-0" />
-            </div>
-            <div className="stat-value font-display text-xl text-primary mt-1 leading-tight">{k.value}</div>
-            <div className={`stat-desc font-mono-crm text-[10px] mt-0.5 flex items-center gap-1 ${k.up === true ? 'text-accent' : k.up === false ? 'text-error' : 'text-secondary'}`}>
-              {k.up === true && <TrendingUp className="w-3 h-3" />}
-              {k.up === false && <TrendingDown className="w-3 h-3" />}
-              {k.trend}
-            </div>
+          <div key={k.titulo} className="stat bg-base-100 border border-base-300 rounded-lg p-4">
+            <div className="flex justify-between items-start"><div className="stat-title font-mono-crm text-[10px] tracking-widest uppercase text-secondary">{k.titulo}</div><k.icon className="w-4 h-4 text-secondary" /></div>
+            <div className="stat-value font-display text-xl text-primary mt-1">{k.valor}</div>
           </div>
         ))}
       </div>
-
-      {/* ── Filters ────────────────────────────────────── */}
-      <div className="flex items-center gap-2 flex-wrap">
-        <Filter className="w-3.5 h-3.5 text-secondary flex-shrink-0" />
-        {['TODAS', 'ACTIVA', 'BORRADOR', 'PLANIFICADA'].map((f) => (
-          <button
-            key={f}
-            onClick={() => setFiltro(f)}
-            className={`btn btn-xs font-mono-crm ${filtro === f ? 'btn-accent' : 'btn-ghost border border-base-300'}`}
-          >
-            {f}
-          </button>
-        ))}
+      <div className="bg-base-100 border border-base-300 rounded-lg overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead><tr className="border-b border-base-300 bg-base-200">{['Nombre', 'Tipo', 'Estado', 'Presupuesto', 'Inicio', ''].map((h) => <th key={h} className="px-4 py-2.5 font-mono-crm text-[9px] uppercase tracking-widest text-secondary font-medium">{h}</th>)}</tr></thead>
+            <tbody className="divide-y divide-base-300">
+              {isLoading && <tr><td colSpan={6} className="text-center py-12 text-secondary font-mono-crm text-xs">Cargando…</td></tr>}
+              {isError && <tr><td colSpan={6} className="text-center py-12 text-error font-mono-crm text-xs">Error al cargar campañas</td></tr>}
+              {campaigns.map((c) => (
+                <tr key={c.id} className="hover:bg-base-200 transition-colors">
+                  <td className="px-4 py-3 font-display font-medium text-xs text-primary">{c.name}</td>
+                  <td className="px-4 py-3"><span className={`font-mono-crm text-[9px] uppercase tracking-wider px-2 py-0.5 rounded ${typeBadge[c.type] ?? 'bg-base-200 text-secondary'}`}>{c.type}</span></td>
+                  <td className="px-4 py-3 font-mono-crm text-[10px] text-secondary">{c.status ?? '—'}</td>
+                  <td className="px-4 py-3 font-mono-crm text-[10px] text-primary">{c.budget != null ? `$${Number(c.budget).toLocaleString()}` : '—'}</td>
+                  <td className="px-4 py-3 font-mono-crm text-[10px] text-secondary">{c.startDate ? new Date(c.startDate).toLocaleDateString() : '—'}</td>
+                  <td className="px-4 py-3 text-right">
+                    <button onClick={() => setModal({ mode: 'edit', campaign: c })} className="btn btn-ghost btn-xs mr-1 font-mono-crm">Editar</button>
+                    <button onClick={() => { if (window.confirm('¿Eliminar campaña?')) deleteMutation.mutate(c.id) }} className="btn btn-ghost btn-xs text-error font-mono-crm">Eliminar</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Pagination meta={meta} onPageChange={setPage} />
       </div>
-
-      {/* ── Campaign Grid ──────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-        {filtradas.map((c) => (
-          <article
-            key={c.id}
-            className={`bg-base-100 rounded-lg border border-base-300 flex flex-col overflow-hidden hover:shadow-md transition-shadow ${c.gold ? 'border-t-4 border-t-accent' : ''}`}
-          >
-            <div className="p-4 flex-1 flex flex-col">
-              {/* Badges */}
-              <div className="flex items-center gap-2 mb-3">
-                <span className={`font-mono-crm text-[9px] uppercase tracking-widest px-2 py-0.5 rounded flex items-center gap-1 ${estadoClases[c.estado] || 'bg-base-200 text-secondary'}`}>
-                  {c.estado === 'ACTIVA' && <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse inline-block" />}
-                  {c.estado}
-                </span>
-                <span className="font-mono-crm text-[9px] uppercase tracking-widest px-2 py-0.5 rounded bg-base-200 text-secondary border border-base-300">
-                  {c.canal}
-                </span>
-              </div>
-
-              <h3 className="font-display font-semibold text-sm text-primary leading-tight mb-1">{c.nombre}</h3>
-              <p className="text-xs text-secondary leading-relaxed mb-4 flex-1">{c.descripcion}</p>
-
-              {/* Data grid */}
-              <div className="grid grid-cols-2 gap-3 mb-4 pt-3 border-t border-base-300">
-                <div>
-                  <span className="font-mono-crm text-[9px] uppercase text-secondary block mb-0.5">Presupuesto</span>
-                  <span className="font-display font-semibold text-sm text-primary">{c.presupuesto}</span>
-                </div>
-                <div>
-                  <span className="font-mono-crm text-[9px] uppercase text-secondary block mb-0.5">CPA Target</span>
-                  <span className="font-display font-semibold text-sm text-primary">{c.cpa}</span>
-                </div>
-              </div>
-
-              {/* Mini chart */}
-              <div>
-                <div className="flex justify-between items-end mb-1.5">
-                  <span className="font-mono-crm text-[9px] text-primary font-medium uppercase tracking-wider">Performance</span>
-                  {c.performance.length > 0
-                    ? <span className="font-mono-crm text-[9px] text-accent">Leads vs Target</span>
-                    : <span className="font-mono-crm text-[9px] text-secondary">Sin datos</span>
-                  }
-                </div>
-                {c.performance.length > 0
-                  ? <MiniChart bars={c.performance} />
-                  : (
-                    <div className="h-12 flex items-center justify-center bg-base-200 rounded border border-base-300 border-dashed">
-                      <span className="font-mono-crm text-[9px] text-secondary">Pendiente de lanzamiento</span>
-                    </div>
-                  )
-                }
-              </div>
-            </div>
-
-            {/* Footer action */}
-            <div className="px-4 py-2.5 border-t border-base-300 bg-base-200 flex justify-between items-center">
-              <span className="font-mono-crm text-[9px] text-secondary">{c.id}</span>
-              <button className="flex items-center gap-1 text-xs text-primary font-display font-medium hover:text-accent transition-colors">
-                Ver detalle <ArrowUpRight className="w-3 h-3" />
-              </button>
-            </div>
-          </article>
-        ))}
-      </div>
+      <Modal open={!!modal} onClose={() => setModal(null)} title={modal?.mode === 'edit' ? 'Editar Campaña' : 'Nueva Campaña'}>
+        <CampaignForm defaultValues={modal?.campaign} onClose={() => setModal(null)} onSuccess={() => setModal(null)} />
+      </Modal>
     </div>
   )
 }

@@ -1,218 +1,130 @@
 import { useState } from 'react'
-import { Plus, AlertTriangle, CheckSquare, Clock, ChevronRight } from 'lucide-react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import { CheckSquare, Clock, AlertTriangle, CheckCircle, Plus } from 'lucide-react'
+import { tasksApi } from '../lib/api.js'
+import Pagination from '../components/ui/Pagination.jsx'
+import Modal from '../components/ui/Modal.jsx'
+import FormField from '../components/ui/FormField.jsx'
 
-const tabs = [
-  { id: 'HOY',       label: 'Hoy' },
-  { id: 'PROXIMAS',  label: 'Próximas' },
-  { id: 'VENCIDAS',  label: 'Vencidas', badge: 2 },
-  { id: 'COMPLETADAS', label: 'Completadas' },
-]
+const TASK_STATUSES = ['PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED']
+const TASK_PRIORITIES = ['LOW', 'MEDIUM', 'HIGH', 'URGENT']
+const statusBadge = { PENDING: 'bg-base-200 text-secondary', IN_PROGRESS: 'bg-accent/10 text-accent', COMPLETED: 'bg-success/10 text-success', CANCELLED: 'bg-error/10 text-error' }
 
-const tareas = [
-  {
-    id: 'T-001',
-    titulo: 'Inspección Final: Penthouse 740 Park Ave',
-    descripcion: 'Verificar que el escaneo espacial coincida con modificaciones del cliente antes del cierre.',
-    tipo: 'Inspección',
-    vencimiento: 'Oct 12, 10:00 AM',
-    asignado: 'JD',
-    estado: 'VENCIDAS',
-    urgente: true,
-  },
-  {
-    id: 'T-002',
-    titulo: 'Revisión de Rendimientos Q3 con Sterling Trust',
-    descripcion: 'Discutir los modelos 3D actualizados para la expansión de la cartera comercial.',
-    tipo: 'Llamada Cliente',
-    vencimiento: 'Hoy, 2:30 PM',
-    asignado: 'JD',
-    estado: 'HOY',
-    urgente: false,
-  },
-  {
-    id: 'T-003',
-    titulo: 'Subir Escaneos LiDAR – 15 Central Park West',
-    descripcion: 'Procesar datos de nube de puntos y mapear al ID de propiedad #9928.',
-    tipo: 'Datos Espaciales',
-    vencimiento: 'Hoy, 5:00 PM',
-    asignado: 'SC',
-    estado: 'HOY',
-    urgente: false,
-  },
-  {
-    id: 'T-004',
-    titulo: 'Preparar Term Sheet – Globex Suite 250',
-    descripcion: 'Redactar términos de renovación de arrendamiento para Globex Corporation.',
-    tipo: 'Legal',
-    vencimiento: 'Oct 15, 9:00 AM',
-    asignado: 'AM',
-    estado: 'PROXIMAS',
-    urgente: false,
-  },
-  {
-    id: 'T-005',
-    titulo: 'Revisión de Oferta – Retail 101',
-    descripcion: 'Analizar contraoferta de Bean Roasters y coordinar con legal.',
-    tipo: 'Negociación',
-    vencimiento: 'Oct 16, 3:00 PM',
-    asignado: 'LT',
-    estado: 'PROXIMAS',
-    urgente: false,
-  },
-  {
-    id: 'T-006',
-    titulo: 'Actualizar Masterplan – Dubai Tower A',
-    descripcion: 'Sincronizar cambios de unidades PH-401 con plano V3.2.',
-    tipo: 'Datos Espaciales',
-    vencimiento: 'Oct 10, 11:00 AM',
-    asignado: 'MR',
-    estado: 'VENCIDAS',
-    urgente: true,
-  },
-  {
-    id: 'T-007',
-    titulo: 'Envío de NDA – Geneva Vertex',
-    descripcion: 'Acuerdo de confidencialidad enviado y firmado por ambas partes.',
-    tipo: 'Legal',
-    vencimiento: 'Oct 8, 2:00 PM',
-    asignado: 'SC',
-    estado: 'COMPLETADAS',
-    urgente: false,
-  },
-]
-
-const coloresTipo = {
-  'Inspección':     'bg-base-200 text-secondary',
-  'Llamada Cliente':'bg-accent/10 text-accent',
-  'Datos Espaciales':'bg-base-200 text-secondary',
-  'Legal':          'bg-warning/10 text-warning',
-  'Negociación':    'bg-base-200 text-secondary',
+function TaskForm({ onSuccess, onClose, defaultValues }) {
+  const qc = useQueryClient()
+  const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm({ defaultValues })
+  const mutation = useMutation({
+    mutationFn: (data) => defaultValues?.id ? tasksApi.update(defaultValues.id, data) : tasksApi.create(data),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['tasks'] }); onSuccess?.() },
+    onError: (e) => setError('root', { message: e.message }),
+  })
+  return (
+    <form onSubmit={handleSubmit((d) => mutation.mutate(d))} className="space-y-4">
+      {errors.root && <div className="p-3 bg-error/10 border border-error/20 rounded text-xs text-error">{errors.root.message}</div>}
+      <FormField label="Título" required error={errors.title?.message}>
+        <input {...register('title', { required: 'El título es obligatorio' })} className="input input-sm w-full bg-base-100 border-base-300" placeholder="Enviar contrato al cliente" />
+      </FormField>
+      <FormField label="Descripción" error={errors.description?.message}>
+        <textarea {...register('description')} className="textarea textarea-sm w-full bg-base-100 border-base-300 h-20" placeholder="Detalles de la tarea…" />
+      </FormField>
+      <div className="grid grid-cols-2 gap-3">
+        <FormField label="Estado" error={errors.status?.message}>
+          <select {...register('status')} className="select select-sm w-full bg-base-100 border-base-300">
+            <option value="">Seleccionar…</option>
+            {TASK_STATUSES.map((s) => <option key={s}>{s}</option>)}
+          </select>
+        </FormField>
+        <FormField label="Prioridad" error={errors.priority?.message}>
+          <select {...register('priority')} className="select select-sm w-full bg-base-100 border-base-300">
+            <option value="">Seleccionar…</option>
+            {TASK_PRIORITIES.map((p) => <option key={p}>{p}</option>)}
+          </select>
+        </FormField>
+      </div>
+      <FormField label="Fecha de Vencimiento" error={errors.dueDate?.message}>
+        <input {...register('dueDate')} type="datetime-local" className="input input-sm w-full bg-base-100 border-base-300" />
+      </FormField>
+      <div className="flex justify-end gap-2 pt-2">
+        <button type="button" onClick={onClose} className="btn btn-ghost btn-sm font-display">Cancelar</button>
+        <button type="submit" disabled={isSubmitting} className="btn btn-accent btn-sm font-display">{isSubmitting ? 'Guardando…' : defaultValues?.id ? 'Actualizar' : 'Crear Tarea'}</button>
+      </div>
+    </form>
+  )
 }
 
 export default function Tasks() {
-  const [tabActiva, setTabActiva] = useState('HOY')
-  const [completadas, setCompletadas] = useState(new Set(['T-007']))
+  const [page, setPage] = useState(1)
+  const [statusFilter, setStatus] = useState('')
+  const [modal, setModal] = useState(null)
+  const qc = useQueryClient()
 
-  const filtradas = tareas.filter((t) => t.estado === tabActiva)
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['tasks', page, statusFilter],
+    queryFn: () => tasksApi.list({ page, limit: 15, status: statusFilter }),
+  })
+  const deleteMutation = useMutation({ mutationFn: (id) => tasksApi.remove(id), onSuccess: () => qc.invalidateQueries({ queryKey: ['tasks'] }) })
 
-  const toggleCompletada = (id) => {
-    setCompletadas((prev) => {
-      const next = new Set(prev)
-      next.has(id) ? next.delete(id) : next.add(id)
-      return next
-    })
-  }
+  const tasks = data?.data ?? []
+  const meta = data?.meta
+
+  const kpis = [
+    { titulo: 'Total Tareas', valor: meta?.total ?? '—', icon: CheckSquare },
+    { titulo: 'Pendientes', valor: tasks.filter((t) => t.status === 'PENDING').length, icon: Clock },
+    { titulo: 'En Progreso', valor: tasks.filter((t) => t.status === 'IN_PROGRESS').length, icon: AlertTriangle },
+    { titulo: 'Completadas', valor: tasks.filter((t) => t.status === 'COMPLETED').length, icon: CheckCircle },
+  ]
 
   return (
     <div className="space-y-5">
-      {/* ── Header ─────────────────────────────────────── */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-display font-semibold text-primary leading-tight">
-            Tareas y Productividad
-          </h1>
-          <p className="text-sm text-secondary mt-0.5">
-            Inspecciones · Seguimientos de cliente · Escaneos espaciales
-          </p>
+          <h1 className="text-2xl font-display font-semibold text-primary leading-tight">Gestión de Tareas</h1>
+          <p className="text-sm text-secondary mt-0.5">Control operativo de actividades del equipo</p>
         </div>
-        <button className="btn btn-accent btn-sm font-display flex-shrink-0 gap-1.5">
-          <Plus className="w-4 h-4" />
-          Nueva Tarea
-        </button>
+        <button onClick={() => setModal({ mode: 'create' })} className="btn btn-accent btn-sm font-display gap-1.5"><Plus className="w-4 h-4" /> Nueva Tarea</button>
       </div>
-
-      {/* ── Tabs ───────────────────────────────────────── */}
-      <div className="flex items-center gap-1 border-b border-base-300">
-        {tabs.map((t) => (
-          <button
-            key={t.id}
-            onClick={() => setTabActiva(t.id)}
-            className={`px-4 py-2.5 font-mono-crm text-[11px] uppercase tracking-widest border-b-2 transition-all flex items-center gap-1.5 ${
-              tabActiva === t.id
-                ? 'border-accent text-accent font-medium'
-                : 'border-transparent text-secondary hover:text-primary'
-            }`}
-          >
-            {t.label}
-            {t.badge && (
-              <span className="bg-error text-error-content font-mono-crm text-[9px] px-1.5 py-0.5 rounded-full">
-                {t.badge}
-              </span>
-            )}
-          </button>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {kpis.map((k) => (
+          <div key={k.titulo} className="stat bg-base-100 border border-base-300 rounded-lg p-4">
+            <div className="flex justify-between items-start"><div className="stat-title font-mono-crm text-[10px] tracking-widest uppercase text-secondary">{k.titulo}</div><k.icon className="w-4 h-4 text-secondary" /></div>
+            <div className="stat-value font-display text-xl text-primary mt-1">{k.valor}</div>
+          </div>
         ))}
       </div>
-
-      {/* ── Task List ──────────────────────────────────── */}
-      <div className="space-y-3">
-        {filtradas.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <CheckSquare className="w-10 h-10 text-base-300 mb-3" />
-            <p className="font-display font-medium text-sm text-secondary">Sin tareas en esta categoría</p>
-          </div>
-        )}
-
-        {filtradas.map((t) => {
-          const done = completadas.has(t.id)
-          return (
-            <div
-              key={t.id}
-              className={`bg-base-100 rounded-lg p-4 border border-base-300 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:shadow-sm transition-shadow relative overflow-hidden ${
-                t.urgente ? 'border-t-4 border-t-accent' : ''
-              } ${done ? 'opacity-60' : ''}`}
-            >
-              {t.urgente && (
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-error" />
-              )}
-
-              <div className="flex items-start gap-3 flex-1 ml-1">
-                {/* Checkbox */}
-                <button
-                  onClick={() => toggleCompletada(t.id)}
-                  className={`mt-0.5 w-4.5 h-4.5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
-                    done ? 'border-accent bg-accent' : 'border-base-300 hover:border-accent'
-                  }`}
-                >
-                  {done && <CheckSquare className="w-3 h-3 text-accent-content" />}
-                </button>
-
-                <div>
-                  <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <span className={`font-mono-crm text-[9px] uppercase tracking-wider px-2 py-0.5 rounded ${coloresTipo[t.tipo] || 'bg-base-200 text-secondary'}`}>
-                      {t.tipo}
-                    </span>
-                    {t.urgente && (
-                      <span className="flex items-center gap-1 text-error font-mono-crm text-[9px]">
-                        <AlertTriangle className="w-3 h-3" />
-                        Vencida
-                      </span>
-                    )}
-                  </div>
-                  <h3 className={`font-display font-semibold text-sm text-primary leading-tight mb-0.5 ${done ? 'line-through text-secondary' : ''}`}>
-                    {t.titulo}
-                  </h3>
-                  <p className="text-xs text-secondary leading-relaxed">{t.descripcion}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 justify-between md:justify-end border-t border-base-300 md:border-t-0 pt-3 md:pt-0">
-                <div className="flex flex-col items-end">
-                  <span className="font-mono-crm text-[9px] uppercase text-secondary">Vencimiento</span>
-                  <span className={`font-mono-crm text-[10px] font-medium ${t.urgente ? 'text-error' : 'text-primary'}`}>
-                    {t.vencimiento}
-                  </span>
-                </div>
-                <div className="w-7 h-7 rounded-full bg-primary text-primary-content flex items-center justify-center font-mono-crm text-[10px] font-bold flex-shrink-0">
-                  {t.asignado}
-                </div>
-                <button className="btn btn-ghost btn-xs btn-circle">
-                  <ChevronRight className="w-3.5 h-3.5 text-secondary" />
-                </button>
-              </div>
-            </div>
-          )
-        })}
+      <div className="flex items-center gap-3 flex-wrap">
+        <select value={statusFilter} onChange={(e) => { setStatus(e.target.value); setPage(1) }} className="select select-sm bg-base-100 border-base-300 font-mono-crm text-xs">
+          <option value="">Todos los Estados</option>
+          {TASK_STATUSES.map((s) => <option key={s}>{s}</option>)}
+        </select>
       </div>
+      <div className="bg-base-100 border border-base-300 rounded-lg overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead><tr className="border-b border-base-300 bg-base-200">{['Título', 'Estado', 'Prioridad', 'Vencimiento', ''].map((h) => <th key={h} className="px-4 py-2.5 font-mono-crm text-[9px] uppercase tracking-widest text-secondary font-medium">{h}</th>)}</tr></thead>
+            <tbody className="divide-y divide-base-300">
+              {isLoading && <tr><td colSpan={5} className="text-center py-12 text-secondary font-mono-crm text-xs">Cargando…</td></tr>}
+              {isError && <tr><td colSpan={5} className="text-center py-12 text-error font-mono-crm text-xs">Error al cargar tareas</td></tr>}
+              {tasks.map((t) => (
+                <tr key={t.id} className="hover:bg-base-200 transition-colors">
+                  <td className="px-4 py-3 font-display font-medium text-xs text-primary">{t.title}</td>
+                  <td className="px-4 py-3"><span className={`font-mono-crm text-[9px] uppercase tracking-wider px-2 py-0.5 rounded ${statusBadge[t.status] ?? 'bg-base-200 text-secondary'}`}>{t.status}</span></td>
+                  <td className="px-4 py-3 font-mono-crm text-[10px] text-secondary">{t.priority ?? '—'}</td>
+                  <td className="px-4 py-3 font-mono-crm text-[10px] text-secondary">{t.dueDate ? new Date(t.dueDate).toLocaleDateString() : '—'}</td>
+                  <td className="px-4 py-3 text-right">
+                    <button onClick={() => setModal({ mode: 'edit', task: t })} className="btn btn-ghost btn-xs mr-1 font-mono-crm">Editar</button>
+                    <button onClick={() => { if (window.confirm('¿Eliminar tarea?')) deleteMutation.mutate(t.id) }} className="btn btn-ghost btn-xs text-error font-mono-crm">Eliminar</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Pagination meta={meta} onPageChange={setPage} />
+      </div>
+      <Modal open={!!modal} onClose={() => setModal(null)} title={modal?.mode === 'edit' ? 'Editar Tarea' : 'Nueva Tarea'}>
+        <TaskForm defaultValues={modal?.task} onClose={() => setModal(null)} onSuccess={() => setModal(null)} />
+      </Modal>
     </div>
   )
 }

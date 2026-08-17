@@ -1,10 +1,16 @@
+import { writeFileSync } from 'fs'
+import { join } from 'path'
+
+const pages = join(import.meta.dirname, '..', 'src', 'pages')
+
+writeFileSync(join(pages, 'PropertyDetail.jsx'), `
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import {
-  ArrowLeft, MapPin, Layers, Phone, Mail,
+  ArrowLeft, MapPin, Maximize2, Layers, Phone, Mail,
   Calendar, ChevronRight, Compass, CheckCircle2,
-  DollarSign, TrendingUp, FileText, Wifi, AlertCircle,
+  DollarSign, TrendingUp, FileText, Map, Wifi, AlertCircle,
 } from 'lucide-react'
 import { propertiesApi, spatialNodesApi, documentsApi } from '../lib/api.js'
 
@@ -75,15 +81,15 @@ export default function PropertyDetail() {
         {property.mlsId && (
           <span className="font-mono-crm text-[10px] text-secondary bg-base-200 px-2 py-0.5 rounded">{property.mlsId}</span>
         )}
-        <span className={`badge badge-sm font-mono-crm text-[10px] ${tourBadgeClass[tourStatus]}`}>{tourLabel[tourStatus]}</span>
+        <span className={\`badge badge-sm font-mono-crm text-[10px] \${tourBadgeClass[tourStatus]}\`}>{tourLabel[tourStatus]}</span>
       </div>
 
       {/* Tour Viewport */}
       <div className="relative w-full bg-primary rounded-lg overflow-hidden" style={{ aspectRatio: '16/9' }}>
         {hasTour ? (
           <iframe
-            src={`${property.gsvUrl}?logo=0&info=1&fs=1&vr=0&sd=1&initload=0&thumbs=1`}
-            title={`Tour virtual — ${property.title}`}
+            src={\`\${property.gsvUrl}?logo=0&info=1&fs=1&vr=0&sd=1&initload=0&thumbs=1\`}
+            title={\`Tour virtual — \${property.title}\`}
             width="100%"
             height="100%"
             className="absolute inset-0 w-full h-full border-0"
@@ -114,6 +120,38 @@ export default function PropertyDetail() {
             </div>
           )}
         </div>
+
+        {/* Spatial hotspot (decorative) */}
+        {hasTour && nodes.length > 0 && (
+          <div className="absolute top-1/3 left-1/4 z-10">
+            <div className="relative group">
+              <button className="w-7 h-7 rounded-full bg-accent flex items-center justify-center">
+                <span className="text-accent-content text-[10px] font-bold">+</span>
+              </button>
+              <div className="absolute left-9 top-0 bg-black/60 backdrop-blur-sm rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                <span className="font-mono-crm text-[10px] text-white/90">Nodo {nodes[0].nodeId}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Bottom dock */}
+        {hasTour && nodes.length > 0 && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
+            <div className="bg-black/50 backdrop-blur-sm rounded-xl px-4 py-2.5 flex items-center gap-3">
+              <select className="select select-xs bg-white/10 text-white border-white/20 font-display text-[12px] min-w-[160px] focus:outline-none">
+                {nodes.map((n) => <option key={n.id} value={n.id} className="text-primary bg-base-100">Nodo {n.stepIndex + 1}</option>)}
+              </select>
+              <div className="h-4 w-px bg-white/20" />
+              <button className="btn btn-xs btn-ghost text-white/70 hover:text-white gap-1 font-mono-crm text-[10px]">
+                <Map className="w-3.5 h-3.5" /> Plano
+              </button>
+              <button className="btn btn-xs btn-ghost text-white/70 hover:text-white gap-1 font-mono-crm text-[10px]">
+                <Maximize2 className="w-3.5 h-3.5" /> Pantalla Completa
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Title overlay bottom-left */}
         {hasTour && (
@@ -150,7 +188,7 @@ export default function PropertyDetail() {
               { id: 'documentos', label: 'Documentos' },
             ].map((t) => (
               <button key={t.id} role="tab" onClick={() => setTab(t.id)}
-                className={`tab font-display text-sm ${tab === t.id ? 'tab-active text-primary border-b-2 border-accent' : 'text-secondary'}`}>
+                className={\`tab font-display text-sm \${tab === t.id ? 'tab-active text-primary border-b-2 border-accent' : 'text-secondary'}\`}>
                 {t.label}
               </button>
             ))}
@@ -313,7 +351,7 @@ export default function PropertyDetail() {
               ['Listado', property.createdAt ? new Date(property.createdAt).toLocaleDateString() : null],
               ['Tipo', property.propertyType],
               ['Nodos Espaciales', nodes.length || null],
-              ['Coordenadas', property.latitude && property.longitude ? `${property.latitude.toFixed(4)}, ${property.longitude.toFixed(4)}` : null],
+              ['Coordenadas', property.latitude && property.longitude ? \`\${property.latitude.toFixed(4)}, \${property.longitude.toFixed(4)}\` : null],
             ].filter(([, v]) => v != null).map(([k, v]) => (
               <div key={k} className="flex justify-between py-1.5 border-b border-base-200 last:border-0">
                 <span className="font-mono-crm text-[10px] text-secondary">{k}</span>
@@ -326,3 +364,6 @@ export default function PropertyDetail() {
     </div>
   )
 }
+`.trimStart())
+
+console.log('PropertyDetail.jsx written')

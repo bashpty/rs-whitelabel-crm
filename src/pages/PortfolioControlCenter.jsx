@@ -1,275 +1,214 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Plus, Download, Search, LayoutGrid, List, RefreshCw, TrendingUp } from 'lucide-react'
-import { propiedades, estadoTourConfig, kpiPortafolio } from '../data/properties.js'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import { Building2, Layers, MapPin, TrendingUp, Plus, Play } from 'lucide-react'
+import { portfoliosApi, propertiesApi } from '../lib/api.js'
+import Pagination from '../components/ui/Pagination.jsx'
+import Modal from '../components/ui/Modal.jsx'
+import FormField from '../components/ui/FormField.jsx'
 
-const fmt = (v) => '$' + new Intl.NumberFormat('en-US').format(v)
+const PROPERTY_TYPES = ['RESIDENTIAL', 'COMMERCIAL', 'INDUSTRIAL', 'LAND', 'MIXED_USE']
+const TOUR_STATUSES = ['PENDING', 'SYNCING', 'SYNCED']
+const tourBadge = { PENDING: 'bg-base-200 text-secondary', SYNCING: 'bg-warning/10 text-warning', SYNCED: 'bg-success/10 text-success' }
+
+function PortfolioForm({ onSuccess, onClose, defaultValues }) {
+  const qc = useQueryClient()
+  const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm({ defaultValues })
+  const mutation = useMutation({
+    mutationFn: (data) => defaultValues?.id ? portfoliosApi.update(defaultValues.id, data) : portfoliosApi.create(data),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['portfolios'] }); onSuccess?.() },
+    onError: (e) => setError('root', { message: e.message }),
+  })
+  return (
+    <form onSubmit={handleSubmit((d) => mutation.mutate(d))} className="space-y-4">
+      {errors.root && <div className="p-3 bg-error/10 border border-error/20 rounded text-xs text-error">{errors.root.message}</div>}
+      <FormField label="Nombre del Portafolio" required error={errors.name?.message}>
+        <input {...register('name', { required: 'El nombre es obligatorio' })} className="input input-sm w-full bg-base-100 border-base-300" placeholder="Portfolio Premium CDMX" />
+      </FormField>
+      <FormField label="Descripción" error={errors.description?.message}>
+        <textarea {...register('description')} className="textarea textarea-sm w-full bg-base-100 border-base-300 h-20" placeholder="Descripción…" />
+      </FormField>
+      <div className="flex justify-end gap-2 pt-2">
+        <button type="button" onClick={onClose} className="btn btn-ghost btn-sm font-display">Cancelar</button>
+        <button type="submit" disabled={isSubmitting} className="btn btn-accent btn-sm font-display">{isSubmitting ? 'Guardando…' : defaultValues?.id ? 'Actualizar' : 'Crear Portafolio'}</button>
+      </div>
+    </form>
+  )
+}
+
+function PropertyForm({ onSuccess, onClose, defaultValues, portfolios }) {
+  const qc = useQueryClient()
+  const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm({ defaultValues })
+  const mutation = useMutation({
+    mutationFn: (data) => defaultValues?.id ? propertiesApi.update(defaultValues.id, data) : propertiesApi.create(data),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['properties'] }); onSuccess?.() },
+    onError: (e) => setError('root', { message: e.message }),
+  })
+  return (
+    <form onSubmit={handleSubmit((d) => mutation.mutate(d))} className="space-y-4">
+      {errors.root && <div className="p-3 bg-error/10 border border-error/20 rounded text-xs text-error">{errors.root.message}</div>}
+      <FormField label="Título / Referencia" required error={errors.title?.message}>
+        <input {...register('title', { required: 'El título es obligatorio' })} className="input input-sm w-full bg-base-100 border-base-300" placeholder="Torre Reforma 401" />
+      </FormField>
+      <FormField label="Tipo de Propiedad" required error={errors.propertyType?.message}>
+        <select {...register('propertyType', { required: 'El tipo es obligatorio' })} className="select select-sm w-full bg-base-100 border-base-300">
+          <option value="">Seleccionar…</option>
+          {PROPERTY_TYPES.map((t) => <option key={t}>{t}</option>)}
+        </select>
+      </FormField>
+      <div className="grid grid-cols-2 gap-3">
+        <FormField label="Valuación (USD)" error={errors.valuation?.message}>
+          <input {...register('valuation', { valueAsNumber: true, min: { value: 0, message: 'Debe ser positivo' } })} type="number" className="input input-sm w-full bg-base-100 border-base-300" />
+        </FormField>
+        <FormField label="MLS ID" error={errors.mlsId?.message}>
+          <input {...register('mlsId')} className="input input-sm w-full bg-base-100 border-base-300" placeholder="LUX-001" />
+        </FormField>
+      </div>
+      {portfolios?.length > 0 && (
+        <FormField label="Portafolio" error={errors.portfolioId?.message}>
+          <select {...register('portfolioId')} className="select select-sm w-full bg-base-100 border-base-300">
+            <option value="">Sin portafolio</option>
+            {portfolios.map((pf) => <option key={pf.id} value={pf.id}>{pf.name}</option>)}
+          </select>
+        </FormField>
+      )}
+      <div className="border-t border-base-300 pt-4 space-y-3">
+        <div className="font-mono-crm text-[9px] uppercase tracking-widest text-secondary">Tour Virtual GSV</div>
+        <FormField label="URL del Tour (Kuula / GSV)" error={errors.gsvUrl?.message} hint="Ej: https://kuula.co/share/...">
+          <input
+            {...register('gsvUrl', { pattern: { value: /^https?:\/\//i, message: 'URL inválida (debe comenzar con http/https)' } })}
+            className="input input-sm w-full bg-base-100 border-base-300"
+            placeholder="https://kuula.co/share/XXXXX"
+          />
+        </FormField>
+        <FormField label="Estado de Sincronización GSV" error={errors.spatialTourStatus?.message}>
+          <select {...register('spatialTourStatus')} className="select select-sm w-full bg-base-100 border-base-300">
+            <option value="">Seleccionar…</option>
+            {TOUR_STATUSES.map((s) => <option key={s}>{s}</option>)}
+          </select>
+        </FormField>
+      </div>
+      <div className="flex justify-end gap-2 pt-2">
+        <button type="button" onClick={onClose} className="btn btn-ghost btn-sm font-display">Cancelar</button>
+        <button type="submit" disabled={isSubmitting} className="btn btn-accent btn-sm font-display">{isSubmitting ? 'Guardando…' : defaultValues?.id ? 'Actualizar' : 'Crear Propiedad'}</button>
+      </div>
+    </form>
+  )
+}
 
 export default function PortfolioControlCenter() {
-  const [busqueda, setBusqueda]       = useState('')
-  const [vistaActual, setVistaActual] = useState('tabla')
-  const [filtroEstado, setFiltroEstado] = useState('todos')
+  const [propPage, setPropPage] = useState(1)
+  const [modal, setModal] = useState(null)
+  const qc = useQueryClient()
 
-  const filtradas = propiedades.filter((p) => {
-    const ok =
-      busqueda === '' ||
-      p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-      p.ubicacion.toLowerCase().includes(busqueda.toLowerCase()) ||
-      p.id.toLowerCase().includes(busqueda.toLowerCase())
-    const okEstado = filtroEstado === 'todos' || p.estadoTour === filtroEstado
-    return ok && okEstado
+  const { data: pfData, isLoading: pfLoading } = useQuery({ queryKey: ['portfolios'], queryFn: () => portfoliosApi.list({ limit: 50 }) })
+  const { data: prData, isLoading: prLoading, isError: prError } = useQuery({
+    queryKey: ['properties', propPage],
+    queryFn: () => propertiesApi.list({ page: propPage, limit: 15 }),
   })
+  const deleteProp = useMutation({ mutationFn: (id) => propertiesApi.remove(id), onSuccess: () => qc.invalidateQueries({ queryKey: ['properties'] }) })
+  const deletePf = useMutation({ mutationFn: (id) => portfoliosApi.remove(id), onSuccess: () => qc.invalidateQueries({ queryKey: ['portfolios'] }) })
+
+  const portfolios = pfData?.data ?? []
+  const properties = prData?.data ?? []
+  const prMeta = prData?.meta
+
+  const kpis = [
+    { titulo: 'Portafolios', valor: portfolios.length, icon: Layers },
+    { titulo: 'Propiedades', valor: prMeta?.total ?? '—', icon: Building2 },
+    { titulo: 'Valor Total', valor: `$${properties.reduce((s, p) => s + (p.valuation ?? 0), 0).toLocaleString()}`, icon: TrendingUp },
+    { titulo: 'Ciudades', valor: new Set(properties.map((p) => p.city).filter(Boolean)).size, icon: MapPin },
+  ]
 
   return (
     <div className="space-y-5">
-      {/* ── Header ─────────────────────────────────────── */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-display font-semibold text-primary leading-tight">
-            Centro de Control de Portafolio
-          </h1>
-          <p className="text-sm text-secondary mt-0.5">
-            Gestión de activos, estado de sincronización GSV y rendimiento de inversión
-          </p>
+          <h1 className="text-2xl font-display font-semibold text-primary leading-tight">Centro de Control de Portafolio</h1>
+          <p className="text-sm text-secondary mt-0.5">Activos inmobiliarios bajo gestión</p>
         </div>
-        <div className="flex gap-2 flex-shrink-0">
-          <button className="btn btn-outline btn-sm gap-1.5">
-            <Download className="w-4 h-4" />
-            Exportar
-          </button>
-          <button className="btn btn-accent btn-sm gap-1.5 font-display">
-            <Plus className="w-4 h-4" />
-            Agregar Activo
-          </button>
+        <div className="flex gap-2">
+          <button onClick={() => setModal({ mode: 'portfolio' })} className="btn btn-ghost btn-sm font-display gap-1.5"><Plus className="w-4 h-4" /> Portafolio</button>
+          <button onClick={() => setModal({ mode: 'property' })} className="btn btn-accent btn-sm font-display gap-1.5"><Plus className="w-4 h-4" /> Propiedad</button>
         </div>
       </div>
-
-      {/* ── KPI Stats ──────────────────────────────────── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          {
-            titulo: 'Activos Bajo Gestión',
-            valor: fmt(kpiPortafolio.aumTotal),
-            desc: '↑ 12.3% este trimestre',
-            color: 'text-primary',
-          },
-          {
-            titulo: 'Propiedades Activas',
-            valor: kpiPortafolio.propiedadesActivas,
-            desc: '3 comerciales · 3 residenciales',
-            color: 'text-primary',
-          },
-          {
-            titulo: 'Cobertura de Tours',
-            valor: kpiPortafolio.coberturaTours + '%',
-            desc: `${propiedades.filter((p) => p.estadoTour === 'sincronizado').length} de ${propiedades.length} sincronizados`,
-            color: 'text-primary',
-          },
-          {
-            titulo: 'Tasa Cap Promedio',
-            valor: kpiPortafolio.tasaCapPromedio + '%',
-            desc: '↑ 0.4% vs. año anterior',
-            color: 'text-primary',
-          },
-        ].map((k) => (
-          <div key={k.titulo} className="stat bg-base-100 border border-base-300 rounded-lg shadow-none p-4">
-            <div className="stat-title font-mono-crm text-[10px] tracking-widest uppercase text-secondary leading-tight">
-              {k.titulo}
-            </div>
-            <div className={`stat-value font-display text-2xl mt-1 ${k.color}`}>{k.valor}</div>
-            <div className="stat-desc font-mono-crm text-[10px] text-accent mt-1">{k.desc}</div>
+        {kpis.map((k) => (
+          <div key={k.titulo} className="stat bg-base-100 border border-base-300 rounded-lg p-4">
+            <div className="flex justify-between items-start"><div className="stat-title font-mono-crm text-[10px] tracking-widest uppercase text-secondary">{k.titulo}</div><k.icon className="w-4 h-4 text-secondary" /></div>
+            <div className="stat-value font-display text-xl text-primary mt-1">{k.valor}</div>
           </div>
         ))}
       </div>
 
-      {/* ── Filter Toolbar ─────────────────────────────── */}
-      <div className="flex flex-wrap gap-3 items-center bg-base-100 px-4 py-3 rounded-lg border border-base-300">
-        <div className="relative flex-1 min-w-[220px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-secondary pointer-events-none" />
-          <input
-            type="text"
-            placeholder="Buscar por nombre, ubicación o ID..."
-            className="input input-sm input-bordered w-full pl-9 font-body"
-            value={busqueda}
-            onChange={(e) => setBusqueda(e.target.value)}
-          />
-        </div>
-
-        <div className="flex gap-1.5 flex-wrap">
-          {['todos', 'sincronizado', 'pendiente', 'error'].map((f) => (
-            <button
-              key={f}
-              onClick={() => setFiltroEstado(f)}
-              className={`btn btn-xs font-mono-crm tracking-wide ${
-                filtroEstado === f ? 'btn-primary' : 'btn-ghost text-secondary'
-              }`}
-            >
-              {f === 'todos' ? 'Todos' : estadoTourConfig[f].label}
-            </button>
+      {/* Portfolios */}
+      <div>
+        <h2 className="font-mono-crm text-[10px] uppercase tracking-widest text-secondary mb-2">Portafolios</h2>
+        {pfLoading && <p className="text-xs text-secondary font-mono-crm">Cargando portafolios…</p>}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+          {portfolios.map((pf) => (
+            <div key={pf.id} className="bg-base-100 border border-base-300 rounded-lg p-4 hover:border-accent/50 transition-colors">
+              <div className="flex justify-between items-start">
+                <div className="font-display font-medium text-sm text-primary">{pf.name}</div>
+                <button onClick={() => { if (window.confirm('¿Eliminar portafolio?')) deletePf.mutate(pf.id) }} className="btn btn-ghost btn-xs text-error">✕</button>
+              </div>
+              {pf.description && <p className="font-mono-crm text-[10px] text-secondary mt-1 line-clamp-2">{pf.description}</p>}
+            </div>
           ))}
-        </div>
-
-        <div className="join ml-auto">
-          <button
-            onClick={() => setVistaActual('tabla')}
-            className={`join-item btn btn-sm ${vistaActual === 'tabla' ? 'btn-primary' : 'btn-outline'}`}
-          >
-            <List className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => setVistaActual('cuadricula')}
-            className={`join-item btn btn-sm ${vistaActual === 'cuadricula' ? 'btn-primary' : 'btn-outline'}`}
-          >
-            <LayoutGrid className="w-4 h-4" />
-          </button>
         </div>
       </div>
 
-      {/* ── Table View ─────────────────────────────────── */}
-      {vistaActual === 'tabla' && (
-        <div className="bg-base-100 rounded-lg border border-base-300 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="table table-zebra w-full">
-              <thead>
-                <tr>
-                  {['ID / Activo', 'Tipo', 'Valoración', 'Tasa Cap', 'Estado GSV', 'Nodos', 'Acciones'].map(
-                    (h) => (
-                      <th key={h} className="th-crm py-3 px-4">
-                        {h}
-                      </th>
-                    ),
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                {filtradas.map((p) => (
-                  <tr key={p.id} className="hover:bg-base-200/60 transition-colors">
-                    <td className="px-4 py-3">
-                      <div className="font-display font-semibold text-sm text-primary leading-tight">{p.nombre}</div>
-                      <div className="font-mono-crm text-[10px] text-secondary mt-0.5">
-                        {p.id} · {p.ubicacion}
-                      </div>
-                    </td>
-                    <td className="px-4">
-                      <span className="badge badge-outline badge-sm text-secondary border-base-300 font-body text-[11px]">
-                        {p.tipo}
-                      </span>
-                    </td>
-                    <td className="px-4">
-                      <div className="font-display font-semibold text-primary text-sm">{fmt(p.valoracion)}</div>
-                      <div className="font-mono-crm text-[10px] text-secondary">
-                        Ingreso: {fmt(p.ingresoNeto)}/año
-                      </div>
-                    </td>
-                    <td className="px-4">
-                      <div className="flex items-center gap-1">
-                        <TrendingUp className="w-3 h-3 text-accent" />
-                        <span className="font-mono-crm text-accent font-medium text-sm">
-                          {p.tasaCapitalizacion}%
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-4">
-                      <span className={`badge ${estadoTourConfig[p.estadoTour].clase} badge-sm font-mono-crm text-[10px]`}>
-                        {estadoTourConfig[p.estadoTour].label}
-                      </span>
-                    </td>
-                    <td className="px-4">
-                      <span className="font-mono-crm text-sm text-secondary">{p.nodosEspaciales}</span>
-                    </td>
-                    <td className="px-4">
-                      <div className="flex gap-1.5">
-                        <Link
-                          to={`/propiedades/${p.id}`}
-                          className="btn btn-accent btn-xs font-display font-medium"
-                        >
-                          Ver Tour
-                        </Link>
-                        <button className="btn btn-outline btn-xs text-secondary font-display">Editar</button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {filtradas.length === 0 && (
-              <div className="py-16 text-center text-secondary font-body text-sm">
-                No se encontraron activos con los filtros seleccionados.
-              </div>
-            )}
-          </div>
+      {/* Properties Table */}
+      <div className="bg-base-100 border border-base-300 rounded-lg overflow-hidden">
+        <div className="px-4 py-3 border-b border-base-300 bg-base-200">
+          <span className="font-mono-crm text-[10px] uppercase tracking-widest text-secondary">Propiedades</span>
         </div>
-      )}
-
-      {/* ── Grid View ──────────────────────────────────── */}
-      {vistaActual === 'cuadricula' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-          {filtradas.map((p) => (
-            <div
-              key={p.id}
-              className="card bg-base-100 border border-base-300 card-gold overflow-hidden hover:shadow-md transition-shadow"
-            >
-              <figure className="relative h-44 overflow-hidden">
-                <img
-                  src={p.imagen}
-                  alt={p.nombre}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent" />
-                <div className="absolute bottom-3 left-3 right-3 flex justify-between items-end">
-                  <div className="text-white">
-                    <div className="font-display font-semibold text-sm leading-tight">{p.nombre}</div>
-                    <div className="font-mono-crm text-[10px] text-white/70">{p.id}</div>
-                  </div>
-                  <span className={`badge ${estadoTourConfig[p.estadoTour].clase} badge-sm font-mono-crm text-[10px]`}>
-                    {estadoTourConfig[p.estadoTour].label}
-                  </span>
-                </div>
-              </figure>
-
-              <div className="card-body p-4 gap-2">
-                <div className="flex justify-between items-start">
-                  <span className="badge badge-outline badge-sm text-secondary border-base-300 text-[11px]">
-                    {p.tipo}
-                  </span>
-                  <div className="text-right">
-                    <div className="font-display font-bold text-primary text-sm">{fmt(p.valoracion)}</div>
-                    <div className="font-mono-crm text-[10px] text-accent">{p.tasaCapitalizacion}% cap rate</div>
-                  </div>
-                </div>
-
-                <p className="font-mono-crm text-[11px] text-secondary truncate">{p.ubicacion}</p>
-
-                <div className="flex gap-4 pt-1">
-                  {[
-                    { label: 'Hab.', val: p.habitaciones },
-                    { label: 'Baños', val: p.banos },
-                    { label: 'm²', val: p.area.toLocaleString() },
-                    { label: 'Nodos', val: p.nodosEspaciales },
-                  ].map((d) => (
-                    <div key={d.label} className="text-center">
-                      <div className="font-mono-crm text-xs font-medium text-primary">{d.val}</div>
-                      <div className="font-mono-crm text-[9px] text-secondary uppercase">{d.label}</div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead><tr className="border-b border-base-300 bg-base-200">{['ID / Activo', 'Tipo', 'Valoración', 'Estado GSV', 'Acciones'].map((h) => <th key={h} className="px-4 py-2.5 font-mono-crm text-[9px] uppercase tracking-widest text-secondary font-medium">{h}</th>)}</tr></thead>
+            <tbody className="divide-y divide-base-300">
+              {prLoading && <tr><td colSpan={5} className="text-center py-12 text-secondary font-mono-crm text-xs">Cargando…</td></tr>}
+              {prError && <tr><td colSpan={5} className="text-center py-12 text-error font-mono-crm text-xs">Error al cargar propiedades</td></tr>}
+              {properties.map((p) => (
+                <tr key={p.id} className="hover:bg-base-200 transition-colors">
+                  <td className="px-4 py-3">
+                    <div className="font-display font-semibold text-xs text-primary">{p.title ?? p.id?.slice(0, 8)}</div>
+                    {p.mlsId && <div className="font-mono-crm text-[9px] text-secondary mt-0.5">{p.mlsId}</div>}
+                  </td>
+                  <td className="px-4 py-3 font-mono-crm text-[10px] text-secondary">{p.propertyType ?? '—'}</td>
+                  <td className="px-4 py-3 font-mono-crm text-[10px] text-primary font-medium">{p.valuation != null ? `$${Number(p.valuation).toLocaleString()}` : '—'}</td>
+                  <td className="px-4 py-3">
+                    <span className={`font-mono-crm text-[9px] uppercase tracking-wider px-2 py-0.5 rounded ${tourBadge[p.spatialTourStatus] ?? 'bg-base-200 text-secondary'}`}>
+                      {p.spatialTourStatus ?? 'PENDING'}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center justify-end gap-1">
+                      <Link
+                        to={`/portafolio/${p.id}`}
+                        className="btn btn-accent btn-xs font-mono-crm gap-1"
+                      >
+                        <Play className="w-3 h-3" /> Ver Tour
+                      </Link>
+                      <button onClick={() => setModal({ mode: 'editProperty', property: p })} className="btn btn-ghost btn-xs font-mono-crm">Editar</button>
+                      <button onClick={() => { if (window.confirm('¿Eliminar propiedad?')) deleteProp.mutate(p.id) }} className="btn btn-ghost btn-xs text-error font-mono-crm">Eliminar</button>
                     </div>
-                  ))}
-                </div>
-
-                <div className="card-actions pt-1">
-                  <Link to={`/propiedades/${p.id}`} className="btn btn-accent btn-sm w-full font-display font-medium">
-                    Ver Tour 3D Virtual
-                  </Link>
-                </div>
-              </div>
-            </div>
-          ))}
-          {filtradas.length === 0 && (
-            <div className="col-span-3 py-16 text-center text-secondary font-body text-sm">
-              No se encontraron activos con los filtros seleccionados.
-            </div>
-          )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      )}
+        <Pagination meta={prMeta} onPageChange={setPropPage} />
+      </div>
+
+      <Modal open={modal?.mode === 'portfolio'} onClose={() => setModal(null)} title="Nuevo Portafolio">
+        <PortfolioForm onClose={() => setModal(null)} onSuccess={() => setModal(null)} />
+      </Modal>
+      <Modal open={modal?.mode === 'property' || modal?.mode === 'editProperty'} onClose={() => setModal(null)} title={modal?.mode === 'editProperty' ? 'Editar Propiedad' : 'Nueva Propiedad'} size="lg">
+        <PropertyForm defaultValues={modal?.property} portfolios={portfolios} onClose={() => setModal(null)} onSuccess={() => setModal(null)} />
+      </Modal>
     </div>
   )
 }

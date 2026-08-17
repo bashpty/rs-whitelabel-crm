@@ -20,6 +20,7 @@ export default function App() {
       <Route path="/" element={<AppLayout />}>
         <Route index element={<Navigate to="/portafolio" replace />} />
         <Route path="portafolio" element={<PortfolioControlCenter />} />
+        <Route path="portafolio/:id" element={<PropertyDetail />} />
         <Route path="propiedades/:id" element={<PropertyDetail />} />
         <Route path="ingestion-espacial" element={<SpatialIngestion />} />
         <Route path="prospectos" element={<LeadIntentDashboard />} />
